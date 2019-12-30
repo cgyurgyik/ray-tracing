@@ -16,7 +16,7 @@ public:
     // -> = dot((p(t) - C), p(t) - C)) = R^2
     // -> = dot((A + t * B - C), A + t * B - C)) = R^2
     // -> = t^2 * dot(B, B) + 2t * dot(B, A - C) + dot (A - C, A - C) - R^2 = 0
-    bool hit(const Ray& ray, value_type minimum, value_type maximum, hit_record& record) const {
+    bool hit(const Ray& ray, value_type minimum, value_type maximum, HitRecord& record) const {
         const BoundVec3 oc = ray.origin() - center_;
         const FreeVec3 direction = ray.direction().to_free();
         const value_type a = direction.dot(direction);

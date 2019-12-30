@@ -1,11 +1,11 @@
 #include <iostream>
-#include <stdio.h>
 #include <fstream>
 #include <vector>
 #include "Vec3.h"
 #include "Hittable.h"
 #include "HittableList.h"
 #include "Sphere.h"
+#include "Camera.h"
 #include "raytracing_utility_functions.h"
 
 // Creates a P3 PPM File. Colors are represented in ASCII.
@@ -39,12 +39,14 @@ void CreatePPMFile(std::vector<std::vector<Color3>> portrait, int max_color) {
 int main() {
     const int num_rows = 200;
     const int num_columns = 100;
+    const int ns = 100;
     const int max_color = 255;
 
     BoundVec3 lower_left_corner(-2.0, -1.0, -1.0);
     FreeVec3 horizontal(4.0, 0.0, 0.0);
     FreeVec3 vertical(0.0, 2.0, 0.0);
     BoundVec3 origin(0.0, 0.0, 0.0);
+    Camera camera(origin, lower_left_corner, horizontal, vertical);
 
     const int num_surfaces = 2;
     Hittable *list[num_surfaces];
@@ -55,10 +57,15 @@ int main() {
     std::vector<std::vector<Color3>> ppm_portrait(num_columns, std::vector<Color3>(num_rows, Color3(0.0, 0.0, 0.0)));
     for (int current_column = num_columns - 1; current_column >= 0; --current_column) {
         for (int current_row = 0; current_row < num_rows; ++current_row) {
-            const value_type u = value_type(current_row) / value_type(num_rows);
-            const value_type v = value_type(current_column) / value_type(num_columns);
-            Ray ray(origin, UnitVec3(lower_left_corner + horizontal * u + vertical * v));
-            const Color3 col = color(ray);
+            FreeVec3 c(0.0, 0.0, 0.0);
+            for (int s = 0; s < ns; ++s) {
+                const value_type u = value_type(current_row) / value_type(num_rows);
+                const value_type v = value_type(current_column) / value_type(num_columns);
+                const Ray ray = camera.getRay(u,v);
+                c += color(ray, world);
+            }
+            c /= value_type(ns);
+            Color3 col(c);
             ppm_portrait[current_column][current_row].r() = int(255.99 * col.r());
             ppm_portrait[current_column][current_row].g() = int(255.99 * col.g());
             ppm_portrait[current_column][current_row].b() = int(255.99 * col.b());
