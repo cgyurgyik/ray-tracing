@@ -3,6 +3,9 @@
 #include <fstream>
 #include <vector>
 #include "Vec3.h"
+#include "Hittable.h"
+#include "HittableList.h"
+#include "Sphere.h"
 #include "raytracing_utility_functions.h"
 
 // Creates a P3 PPM File. Colors are represented in ASCII.
@@ -42,6 +45,12 @@ int main() {
     FreeVec3 horizontal(4.0, 0.0, 0.0);
     FreeVec3 vertical(0.0, 2.0, 0.0);
     BoundVec3 origin(0.0, 0.0, 0.0);
+
+    const int num_surfaces = 2;
+    Hittable *list[num_surfaces];
+    list[0] = new Sphere(Vec3(0.0, 0.0, -1.0), 0.5);
+    list[1] = new Sphere(Vec3(0.0, -100.5, -1.0), 100.0);
+    HittableList *world = new HittableList(list, num_surfaces);
 
     std::vector<std::vector<Color3>> ppm_portrait(num_columns, std::vector<Color3>(num_rows, Color3(0.0, 0.0, 0.0)));
     for (int current_column = num_columns - 1; current_column >= 0; --current_column) {
