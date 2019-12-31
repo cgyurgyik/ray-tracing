@@ -22,4 +22,5 @@ private:
     BoundVec3 origin_;
     UnitVec3 direction_;
 };
+
 #endif //RAYTRACING_RAY_H

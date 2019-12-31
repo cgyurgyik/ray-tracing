@@ -36,8 +36,8 @@ int main() {
     Hittable *list[num_surfaces];
     list[0] = new Sphere(Vec3(0.0, 0.0, -1.0), 0.5, new Lambertian(Color3(0.8, 0.3, 0.3)));
     list[1] = new Sphere(Vec3(0.0, -100.5, -1.0), 100.0, new Lambertian(Color3(0.8, 0.8, 0.0)));
-    list[2] = new Sphere(Vec3(1.0, 0.0, -1.0), 0.5, new Metal(Color3(0.8, 0.6, 0.2), /*fuzz=*/1.0));
-    list[3] = new Sphere(Vec3(-1.0, 0.0, -1.0), 0.5, new Metal(Color3(0.8, 0.8, 0.8), /*fuzz=*/0.3));
+    list[2] = new Sphere(Vec3(1.0, 0.0, -1.0), 0.5, new Metal(Color3(0.8, 0.6, 0.2), /*fuzz=*/0.3));
+    list[3] = new Sphere(Vec3(-1.0, 0.0, -1.0), 0.5, new Metal(Color3(0.8, 0.8, 0.8), /*fuzz=*/1.0));
     HittableList *world = new HittableList(list, num_surfaces);
 
     // Print to the file.

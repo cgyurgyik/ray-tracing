@@ -23,5 +23,4 @@ private:
     Color3 albedo_;
 };
 
-
 #endif //RAYTRACING_LAMBERTIAN_H

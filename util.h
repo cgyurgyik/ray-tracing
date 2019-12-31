@@ -67,5 +67,4 @@ void antialiasing(Color3& current_color, const Camera& camera, HittableList* wor
     current_color /= value_type(num_runs); // Take average sample.
 }
 
-
 #endif //RAYTRACING_UTIL_H
