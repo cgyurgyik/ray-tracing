@@ -3,4 +3,4 @@ project(raytracing)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(raytracing Hittable.h main.cpp Vec3.h raytracing_utility_functions.h Sphere.h HittableList.h Camera.h)
+add_executable(raytracing Hittable.h main.cpp Vec3.h Ray.h Sphere.h HittableList.h Camera.h Material.h Lambertian.h Metal.h util.h)

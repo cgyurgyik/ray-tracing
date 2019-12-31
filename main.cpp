@@ -6,14 +6,18 @@
 #include "HittableList.h"
 #include "Sphere.h"
 #include "Camera.h"
-#include "raytracing_utility_functions.h"
+#include "util.h"
+#include "Lambertian.h"
+#include "Metal.h"
 
 // Creates a P3 PPM File. Colors are represented in ASCII.
 int main() {
     // Dimensions for the PPM image.
-    const int x_pixels = 200;
-    const int y_pixels = 100;
-    const int num_runs = 100; // The average number of runs, for antialiasing.
+    const int x_pixels = 500;
+    const int y_pixels = 200;
+
+    // The average number of runs, for antialiasing.
+    const int num_runs = 100;
 
 
     // 'max_color' represents the maximum color value.
@@ -26,10 +30,13 @@ int main() {
     const BoundVec3 origin(0.0, 0.0, 0.0);
     const Camera camera(origin, lower_left_corner, horizontal, vertical);
 
-    const int num_surfaces = 2;
+    // World.
+    const int num_surfaces = 4;
     Hittable *list[num_surfaces];
-    list[0] = new Sphere(Vec3(0.0, 0.0, -1.0), 0.5);
-    list[1] = new Sphere(Vec3(0.0, -100.5, -1.0), 100.0);
+    list[0] = new Sphere(Vec3(0.0, 0.0, -1.0), 0.5, new Lambertian(Color3(0.8, 0.3, 0.3)));
+    list[1] = new Sphere(Vec3(0.0, -100.5, -1.0), 100.0, new Lambertian(Color3(0.8, 0.8, 0.0)));
+    list[2] = new Sphere(Vec3(1.0, 0.0, -1.0), 0.5, new Metal(Color3(0.8, 0.6, 0.2), /*fuzz=*/0.3));
+    list[3] = new Sphere(Vec3(-1.0, 0.0, -1.0), 0.5, new Metal(Color3(0.8, 0.8, 0.8), /*fuzz=*/1.0));
     HittableList *world = new HittableList(list, num_surfaces);
 
     // Print to the file.
@@ -44,17 +51,20 @@ int main() {
     file << x_pixels << " " << y_pixels;
     file << "\n" << max_color << "\n";
 
+    const int depth = 0;
+
     // Top to bottom, left to right.
     for (int j = y_pixels - 1; j >= 0; --j) {
         for (int i = 0; i < x_pixels; ++i) {
-            Color3 current_color(0.0, 0.0, 0.0);
+            Color3 current_color;
+
             antialiasing(current_color, camera, world,
-                    num_runs, x_pixels, y_pixels, i, j);
+                    num_runs, x_pixels, y_pixels, i, j, depth);
             current_color = dampen(current_color);
-            const value_type color_value = max_color + value_type(0.99);
-            const int i_red = int(color_value * current_color.r());
-            const int i_green = int(color_value * current_color.g());
-            const int i_blue = int(color_value * current_color.b());
+
+            const int i_red = int(max_color * current_color.r());
+            const int i_green = int(max_color * current_color.g());
+            const int i_blue = int(max_color * current_color.b());
             file << i_red << " " << i_green << " " << i_blue << "\n";
         }
     }

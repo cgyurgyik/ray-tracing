@@ -14,6 +14,7 @@ using value_type = double;
 //      [z]
 struct Vec3 {
 public:
+    Vec3() : x_{0.0}, y_{0.0}, z_{0.0} {}
     constexpr Vec3(const value_type x, const value_type y, const value_type z)
             : x_{x}, y_{y}, z_{z} {}
 
@@ -149,21 +150,22 @@ inline constexpr BoundVec3 operator-(BoundVec3 v1, const FreeVec3& v2) {
 // a length of 1. To prevent its length from changing, UnitVec3 does not allow
 // for mutations.
 struct UnitVec3 {
+    UnitVec3() : inner_{FreeVec3(0.0,0.0,0.0)} {}
     UnitVec3(value_type x, value_type y, value_type z)
             : UnitVec3{FreeVec3{x, y, z}} {}
 
     explicit UnitVec3(const Vec3& vec3) : UnitVec3{FreeVec3{vec3}} {}
 
-    explicit UnitVec3(const FreeVec3& free_vec3) : inner{free_vec3 / free_vec3.length()} {}
+    explicit UnitVec3(const FreeVec3& free_vec3) : inner_{free_vec3 / free_vec3.length()} {}
 
     inline constexpr value_type x() const { return this->to_free().x(); }
     inline constexpr value_type y() const { return this->to_free().y(); }
     inline constexpr value_type z() const { return this->to_free().z(); }
 
-    inline constexpr const FreeVec3& to_free() const { return inner; }
+    inline constexpr const FreeVec3& to_free() const { return inner_; }
 
 private:
-    FreeVec3 inner;
+    FreeVec3 inner_;
 };
 
 inline constexpr FreeVec3 operator*(const UnitVec3& v, const value_type scalar) {
@@ -181,6 +183,7 @@ inline constexpr FreeVec3 operator/(const UnitVec3& v, const value_type scalar) 
 //      [blue]
 struct Color3  {
 public:
+    Color3() : r_{0.0}, g_{0.0}, b_{0.0} {}
     constexpr Color3(const value_type r, const value_type g, const value_type b)
             : r_{r}, g_{g}, b_{b} {}
 
@@ -241,27 +244,12 @@ inline constexpr Color3 operator*(Color3 v, const value_type scalar) {
     return v *= scalar;
 }
 
+inline Color3 operator*(const Color3& v1, const Color3& v2) {
+    return Color3(v1.r() * v2.r(), v1.g() * v2.g(), v1.b() * v2.b());
+}
+
 inline constexpr Color3 operator/(Color3 v, const value_type scalar) {
     return v /= scalar;
 }
-
-// Represents a computation of what color is seen along a ray.
-struct Ray {
-    constexpr Ray(const BoundVec3& origin, const UnitVec3& direction)
-            : origin_{origin}, direction_{direction} {}
-
-    // Represents the function p(t) = origin + t * direction,
-    // where p is a 3-dimensional position, and t is a scalar.
-    constexpr BoundVec3 point_at_parameter(const value_type t) const {
-        return this->origin_ + (this->direction_ * t);
-    }
-
-    inline constexpr BoundVec3 origin() const { return this->origin_; }
-    inline UnitVec3 direction() const { return this->direction_; }
-
-private:
-    BoundVec3 origin_;
-    UnitVec3 direction_;
-};
 
 #endif //RAYTRACING_VEC3_H
