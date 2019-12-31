@@ -25,7 +25,7 @@ public:
         const value_type b = direction.dot(oc);
         const value_type c = oc.dot(oc) - (radius_ * radius_);
         const value_type discriminant = (b * b) - (a * c);
-        if (discriminant < 0) return false;
+        if (discriminant <= 0) return false;
         const value_type hit_point_one = (-b - std::sqrt(discriminant)) / a;
         if (hit_point_one > t_min && hit_point_one < t_max) {
             record.hit_point = hit_point_one;
