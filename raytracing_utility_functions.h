@@ -28,6 +28,7 @@ FreeVec3 random_value_in_unit_sphere() {
     return v;
 }
 
+// TODO: Fix.
 Color3 color(const Ray& ray, Hittable *world) {
     HitRecord record;
     const bool is_world_hit = world->hit(ray, /*minimum=*/value_type(0.001),
@@ -43,6 +44,26 @@ Color3 color(const Ray& ray, Hittable *world) {
     const UnitVec3 unit_direction = ray.direction();
     const value_type t = 0.5 * (unit_direction.y() + 1.0);
     return Color3(1.0, 1.0, 1.0) * (1.0 - t) + Color3(0.5, 0.7, 1.0) * t;
+}
+
+// Dampens the current color by square-rooting each value.
+inline Color3 dampen(const Color3& current_color) {
+    return Color3(std::sqrt(current_color.r()),
+                  std::sqrt(current_color.g()),
+                  std::sqrt(current_color.b()));
+}
+
+// To implement anti-aliasing, take the average sample over n trials.
+// This allows for less jagged edges for each surface in the world.
+void antialiasing(Color3& current_color, const Camera& camera, HittableList* world,
+        int num_runs, int x_pixels, int y_pixels, int i, int j) {
+    for (int current_run = 0; current_run < num_runs; ++current_run) {
+        const value_type u = value_type(i) + random_value() / value_type(x_pixels);
+        const value_type v = value_type(j) + random_value() / value_type(y_pixels);
+        const Ray ray = camera.getRay(u, v);
+        current_color += color(ray, world);
+        current_color /= value_type(num_runs);
+    }
 }
 
 #endif //RAYTRACING_RAYTRACING_UTILITY_FUNCTIONS_H

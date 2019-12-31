@@ -9,44 +9,22 @@
 #include "raytracing_utility_functions.h"
 
 // Creates a P3 PPM File. Colors are represented in ASCII.
-// 'portrait' represents the corresponding layout using 3-dimensional color vectors.
-// 'max_color' represents the maximum color value, [0, max_color].
-void CreatePPMFile(std::vector<std::vector<Color3>> portrait, int max_color) {
-    std::ofstream file;
-    file.open("raytracing_demo.ppm");
-    if (!file) {
-        throw std::runtime_error("\nError opening the file.");
-    }
-    const auto num_rows = portrait.size();
-    const auto num_columns = portrait[0].size();
-
-    file << "P3\n" ;
-    file << num_columns << " " << num_rows;
-    file << "\n" << max_color << "\n";
-
-    // Bottom to top, left to right.
-    for (int row = num_rows - 1; row >= 0; --row) {
-        for (int column = 0; column < num_columns; ++column) {
-            const int i_red = portrait[row][column].r();
-            const int i_green = portrait[row][column].g();
-            const int i_blue = portrait[row][column].b();
-            file << i_red << " " << i_green << " " << i_blue << "\n";
-        }
-    }
-    file.close();
-}
-
 int main() {
-    const int num_rows = 200;
-    const int num_columns = 100;
-    const int ns = 100;
+    // Dimensions for the PPM image.
+    const int x_pixels = 200;
+    const int y_pixels = 100;
+    const int num_runs = 1; // The average number of runs, for antialiasing.
+
+
+    // 'max_color' represents the maximum color value.
     const int max_color = 255;
 
-    BoundVec3 lower_left_corner(-2.0, -1.0, -1.0);
-    FreeVec3 horizontal(4.0, 0.0, 0.0);
-    FreeVec3 vertical(0.0, 2.0, 0.0);
-    BoundVec3 origin(0.0, 0.0, 0.0);
-    Camera camera(origin, lower_left_corner, horizontal, vertical);
+    // Simple axis-aligned camera.
+    const BoundVec3 lower_left_corner(-2.0, -1.0, -1.0);
+    const FreeVec3 horizontal(4.0, 0.0, 0.0);
+    const FreeVec3 vertical(0.0, 2.0, 0.0);
+    const BoundVec3 origin(0.0, 0.0, 0.0);
+    const Camera camera(origin, lower_left_corner, horizontal, vertical);
 
     const int num_surfaces = 2;
     Hittable *list[num_surfaces];
@@ -54,22 +32,32 @@ int main() {
     list[1] = new Sphere(Vec3(0.0, -100.5, -1.0), 100.0);
     HittableList *world = new HittableList(list, num_surfaces);
 
-    std::vector<std::vector<Color3>> ppm_portrait(num_columns, std::vector<Color3>(num_rows, Color3(0.0, 0.0, 0.0)));
-    for (int current_column = num_columns - 1; current_column >= 0; --current_column) {
-        for (int current_row = 0; current_row < num_rows; ++current_row) {
-            Color3 col(0.0, 0.0, 0.0);
-            for (int s = 0; s < ns; ++s) {
-                const value_type u = value_type(current_row) / value_type(num_rows);
-                const value_type v = value_type(current_column) / value_type(num_columns);
-                const Ray ray = camera.getRay(u,v);
-                col += color(ray, world);
-            }
-            col /= value_type(ns);
-            col = Color3(std::sqrt(col.r()), std::sqrt(col.g()), std::sqrt(col.b()));
-            ppm_portrait[current_column][current_row].r() = int(255.99 * col.r());
-            ppm_portrait[current_column][current_row].g() = int(255.99 * col.g());
-            ppm_portrait[current_column][current_row].b() = int(255.99 * col.b());
+    // Print to the file.
+    std::ofstream file;
+    file.open("raytracing_demo.ppm");
+    if (!file) {
+        throw std::runtime_error("\nError opening the file.");
+    }
+
+    // PPM metadata.
+    file << "P3\n" ;
+    file << x_pixels << " " << y_pixels;
+    file << "\n" << max_color << "\n";
+
+    // Bottom to top, left to right.
+    for (int j = y_pixels - 1; j >= 0; --j) {
+        for (int i = 0; i < x_pixels; ++i) {
+            Color3 current_color(0.0, 0.0, 0.0);
+            antialiasing(current_color, camera, world,
+                    num_runs, x_pixels, y_pixels, i, j);
+            current_color = dampen(current_color);
+
+            const value_type color_value = max_color + value_type(0.99);
+            const int i_red = int(color_value * current_color.r());
+            const int i_green = int(color_value * current_color.g());
+            const int i_blue = int(color_value * current_color.b());
+            file << i_red << " " << i_green << " " << i_blue << "\n";
         }
     }
-    CreatePPMFile(ppm_portrait, max_color);
+    file.close();
 }

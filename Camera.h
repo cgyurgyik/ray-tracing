@@ -9,8 +9,11 @@ public:
             const FreeVec3& horizontal, const FreeVec3& vertical) :
             origin_{origin}, lower_left_corner_{lower_left_corner},
             horizontal_{horizontal}, vertical_{vertical} {};
-    Ray getRay(value_type u, value_type v) {
-        return Ray(origin_, UnitVec3(lower_left_corner_ + (horizontal_ * u) + (vertical_ * v) - origin_));
+
+    // Gets the current ray from the camera point of view.
+    Ray getRay(value_type u, value_type v) const {
+        return Ray(origin_, UnitVec3(lower_left_corner_
+        + (horizontal_ * u) + (vertical_ * v) - origin_));
     }
 private:
     const BoundVec3 origin_;

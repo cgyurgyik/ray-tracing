@@ -181,7 +181,6 @@ inline constexpr FreeVec3 operator/(const UnitVec3& v, const value_type scalar) 
 //      [blue]
 struct Color3  {
 public:
-    constexpr explicit Color3(const Vec3& vec3) : r_{vec3.x()}, g_{vec3.y()}, b_{vec3.z()} {}
     constexpr Color3(const value_type r, const value_type g, const value_type b)
             : r_{r}, g_{g}, b_{b} {}
 
