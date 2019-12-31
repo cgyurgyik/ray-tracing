@@ -7,7 +7,7 @@
 #include <functional>
 #include <random>
 #include "Camera.h"
-#include "Material.h"
+#include "material/Material.h"
 
 // Generates a pseudorandom number between 0.0 and 1.0.
 // See: <random> for more information.

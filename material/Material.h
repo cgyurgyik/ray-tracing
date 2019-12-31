@@ -1,7 +1,7 @@
 #ifndef RAYTRACING_MATERIAL_H
 #define RAYTRACING_MATERIAL_H
-#include "Vec3.h"
-#include "Hittable.h"
+#include "../Vec3.h"
+#include "../Hittable.h"
 
 // Represents the behavior of material, or how a ray may react to certain materials.
 class Material {

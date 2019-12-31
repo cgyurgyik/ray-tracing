@@ -2,8 +2,8 @@
 #define RAYTRACING_METAL_H
 
 #include "Material.h"
-#include "Vec3.h"
-#include "util.h"
+#include "../Vec3.h"
+#include "../util.h"
 
 // Represents a metal surface. The general trend is, the bigger the surface,
 // the fuzzier the reflection will be. This class allows for a fuzz parameter

@@ -7,8 +7,8 @@
 #include "Sphere.h"
 #include "Camera.h"
 #include "util.h"
-#include "Lambertian.h"
-#include "Metal.h"
+#include "material/Lambertian.h"
+#include "material/Metal.h"
 
 // Creates a P3 PPM File. Colors are represented in ASCII.
 int main() {
