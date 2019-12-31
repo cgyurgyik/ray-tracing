@@ -25,8 +25,12 @@ public:
     inline constexpr value_type& y() { return this->y_; }
     inline constexpr value_type& z() { return this->z_; }
 
-    value_type length() const {
+    inline value_type length() const {
         return std::hypot(this->x(), this->y(), this->z());
+    }
+
+    inline value_type squared_length() const {
+        return x() * x() + y() * y() + z() * z();
     }
 
 private:
@@ -178,7 +182,6 @@ inline constexpr FreeVec3 operator/(const UnitVec3& v, const value_type scalar) 
 struct Color3  {
 public:
     constexpr explicit Color3(const Vec3& vec3) : r_{vec3.x()}, g_{vec3.y()}, b_{vec3.z()} {}
-    constexpr explicit Color3(const FreeVec3& fvec3) : r_{fvec3.x()}, g_{fvec3.y()}, b_{fvec3.z()} {}
     constexpr Color3(const value_type r, const value_type g, const value_type b)
             : r_{r}, g_{g}, b_{b} {}
 
@@ -190,14 +193,58 @@ public:
     inline constexpr value_type& g() { return this->g_; }
     inline constexpr value_type& b() { return this->b_; }
 
+    inline constexpr Color3& operator+=(const Color3& other) {
+        this->r() += other.r();
+        this->g() += other.g();
+        this->b() += other.b();
+        return *this;
+    }
+
+    inline constexpr Color3& operator-=(const Color3& other) {
+        this->r() -= other.r();
+        this->g() -= other.g();
+        this->b() -= other.b();
+        return *this;
+    }
+
+    inline constexpr Color3& operator*=(const value_type scalar) {
+        this->r() *= scalar;
+        this->g() *= scalar;
+        this->b() *= scalar;
+        return *this;
+    }
+
+    inline constexpr Color3& operator/=(const value_type scalar) {
+        this->r() /= scalar;
+        this->g() /= scalar;
+        this->b() /= scalar;
+        return *this;
+    }
+
 private:
-    // Represents red.
+    // Represents the red value.
     value_type r_;
-    // Represents green.
+    // Represents the green value.
     value_type g_;
-    // Represents blue.
+    // Represents the blue value.
     value_type b_;
 };
+
+inline constexpr Color3 operator+(Color3 v1, const Color3& v2) {
+    return v1 += v2;
+}
+
+inline constexpr Color3 operator-(Color3 v1, const Color3& v2) {
+    return v1 -= v2;
+}
+
+inline constexpr Color3 operator*(Color3 v, const value_type scalar) {
+    return v *= scalar;
+}
+
+inline constexpr Color3 operator/(Color3 v, const value_type scalar) {
+    return v /= scalar;
+}
 
 // Represents a computation of what color is seen along a ray.
 struct Ray {

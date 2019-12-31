@@ -29,7 +29,6 @@ public:
             record.hit_point = hit_point_one;
             record.point_at_parameter = ray.point_at_parameter(record.hit_point);
             record.normal = (FreeVec3(record.point_at_parameter) - center_) / radius_;
-            record.is_hit = true;
             return true;
         }
         const value_type hit_point_two = (-b + std::sqrt(discriminant)) / (2.0 * a);
@@ -37,7 +36,6 @@ public:
             record.hit_point = hit_point_two;
             record.point_at_parameter = ray.point_at_parameter(record.hit_point);
             record.normal = (FreeVec3(record.point_at_parameter) - center_) / radius_;
-            record.is_hit = true;
             return true;
         }
         return false;

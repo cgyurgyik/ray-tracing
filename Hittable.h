@@ -4,10 +4,9 @@
 
 // A record to determine necessary attributes for a hit.
 struct HitRecord {
-    bool is_hit;
     value_type hit_point;
-    Vec3 point_at_parameter = Vec3(0.0,0.0,0.0);
-    Vec3 normal = Vec3(0.0,0.0,0.0);
+    BoundVec3 point_at_parameter = BoundVec3(0.0,0.0,0.0);
+    FreeVec3 normal = FreeVec3(0.0,0.0,0.0);
 };
 
 // Represents an object with a hittable surface.

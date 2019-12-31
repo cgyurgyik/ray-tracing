@@ -57,15 +57,15 @@ int main() {
     std::vector<std::vector<Color3>> ppm_portrait(num_columns, std::vector<Color3>(num_rows, Color3(0.0, 0.0, 0.0)));
     for (int current_column = num_columns - 1; current_column >= 0; --current_column) {
         for (int current_row = 0; current_row < num_rows; ++current_row) {
-            FreeVec3 c(0.0, 0.0, 0.0);
+            Color3 col(0.0, 0.0, 0.0);
             for (int s = 0; s < ns; ++s) {
                 const value_type u = value_type(current_row) / value_type(num_rows);
                 const value_type v = value_type(current_column) / value_type(num_columns);
                 const Ray ray = camera.getRay(u,v);
-                c += color(ray, world);
+                col += color(ray, world);
             }
-            c /= value_type(ns);
-            Color3 col(c);
+            col /= value_type(ns);
+            col = Color3(std::sqrt(col.r()), std::sqrt(col.g()), std::sqrt(col.b()));
             ppm_portrait[current_column][current_row].r() = int(255.99 * col.r());
             ppm_portrait[current_column][current_row].g() = int(255.99 * col.g());
             ppm_portrait[current_column][current_row].b() = int(255.99 * col.b());

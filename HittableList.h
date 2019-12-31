@@ -12,7 +12,7 @@ private:
 };
 
 bool HittableList::hit(const Ray &ray, value_type minimum, value_type maximum, HitRecord &record) const {
-    HitRecord temp_record{.point_at_parameter=Vec3(0.0,0.0,0.0), .normal=Vec3(0.0,0.0,0.0)};
+    HitRecord temp_record{.point_at_parameter=BoundVec3(0.0,0.0,0.0), .normal=FreeVec3(0.0,0.0,0.0)};
     bool hit_anything = false;
     value_type closest_hit = maximum;
     for (int i = 0; i < list_size_; ++i) {
