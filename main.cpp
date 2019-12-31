@@ -13,7 +13,7 @@ int main() {
     // Dimensions for the PPM image.
     const int x_pixels = 200;
     const int y_pixels = 100;
-    const int num_runs = 1; // The average number of runs, for antialiasing.
+    const int num_runs = 100; // The average number of runs, for antialiasing.
 
 
     // 'max_color' represents the maximum color value.
@@ -44,14 +44,13 @@ int main() {
     file << x_pixels << " " << y_pixels;
     file << "\n" << max_color << "\n";
 
-    // Bottom to top, left to right.
+    // Top to bottom, left to right.
     for (int j = y_pixels - 1; j >= 0; --j) {
         for (int i = 0; i < x_pixels; ++i) {
             Color3 current_color(0.0, 0.0, 0.0);
             antialiasing(current_color, camera, world,
                     num_runs, x_pixels, y_pixels, i, j);
             current_color = dampen(current_color);
-
             const value_type color_value = max_color + value_type(0.99);
             const int i_red = int(color_value * current_color.r());
             const int i_green = int(color_value * current_color.g());

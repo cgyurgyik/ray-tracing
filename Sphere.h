@@ -16,25 +16,25 @@ public:
     // -> = dot((p(t) - C), p(t) - C)) = R^2
     // -> = dot((A + t * B - C), A + t * B - C)) = R^2
     // -> = t^2 * dot(B, B) + 2t * dot(B, A - C) + dot (A - C, A - C) - R^2 = 0
-    bool hit(const Ray& ray, value_type minimum, value_type maximum, HitRecord& record) const {
+    bool hit(const Ray& ray, value_type t_min, value_type t_max, HitRecord& record) const {
         const BoundVec3 oc = ray.origin() - center_;
         const FreeVec3 direction = ray.direction().to_free();
         const value_type a = direction.dot(direction);
-        const value_type b = 2.0 * direction.dot(oc) - radius_ * radius_;
-        const value_type c = oc.dot(oc);
-        const value_type discriminant = (b * b) - (4.0 * a * c);
+        const value_type b = direction.dot(oc);
+        const value_type c = oc.dot(oc) - (radius_ * radius_);
+        const value_type discriminant = (b * b) - (a * c);
         if (discriminant < 0) return false;
-        const value_type hit_point_one = (-b - std::sqrt(discriminant)) / (2.0 * a);
-        if (hit_point_one > minimum && hit_point_one < maximum) {
+        const value_type hit_point_one = (-b - std::sqrt(discriminant)) / a;
+        if (hit_point_one > t_min && hit_point_one < t_max) {
             record.hit_point = hit_point_one;
-            record.point_at_parameter = ray.point_at_parameter(record.hit_point);
+            record.point_at_parameter = ray.point_at_parameter(hit_point_one);
             record.normal = (FreeVec3(record.point_at_parameter) - center_) / radius_;
             return true;
         }
         const value_type hit_point_two = (-b + std::sqrt(discriminant)) / (2.0 * a);
-        if (hit_point_two > minimum && hit_point_two < maximum) {
+        if (hit_point_two > t_min && hit_point_two < t_max) {
             record.hit_point = hit_point_two;
-            record.point_at_parameter = ray.point_at_parameter(record.hit_point);
+            record.point_at_parameter = ray.point_at_parameter(hit_point_two);
             record.normal = (FreeVec3(record.point_at_parameter) - center_) / radius_;
             return true;
         }
