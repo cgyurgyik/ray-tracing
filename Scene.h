@@ -55,20 +55,22 @@ HittableList* random_scene() {
 // Creates a scene with three spheres and a background.
 // From left to right: Dielectric, Lambertian, Metallic.
 HittableList* three_spheres() {
-    const int num_surfaces = 4;
+    const int num_surfaces = 5;
     Hittable** list = new Hittable*[num_surfaces];
 
     // Background.
     list[0] = new Sphere(BoundVec3(0.0, -100.5, -1.0), 100.0,
                          new Lambertian(Color3(0.1, 0.3, 0.01)));
-    // (Left) Dielectric material.
+    // (Left) Dielectric material, hollow sphere.
     list[1] = new Sphere(BoundVec3(-1.2, 0.0, -1.0), 0.5,
                          new Dielectric(DIELECTRIC_MATERIAL_REFRACTIVE_INDEX::GLASS_MID));
+    list[2] = new Sphere(BoundVec3(-1.2, 0.0, -1.0), -0.48,
+                         new Dielectric(DIELECTRIC_MATERIAL_REFRACTIVE_INDEX::GLASS_MID));
     // (Middle) Lambertian material.
-    list[2] = new Sphere(BoundVec3(0.0, 0.0, -1.0), 0.5,
+    list[3] = new Sphere(BoundVec3(0.0, 0.0, -1.0), 0.5,
                          new Lambertian(Color3(0.1, 0.2, 0.5)));
     // (Right) Metallic material.
-    list[3] = new Sphere(BoundVec3(1.2, 0.0, -1.0), 0.5,
+    list[4] = new Sphere(BoundVec3(1.2, 0.0, -1.0), 0.5,
                          new Metal(Color3(0.5, 0.5, 0.5), /*fuzz=*/0.01));
 
     return new HittableList(list, num_surfaces);
