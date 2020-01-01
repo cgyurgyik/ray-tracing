@@ -6,7 +6,7 @@
 // Represents a 3-dimensional sphere. Each sphere has a center and a radius.
 class Sphere : public Hittable {
 public:
-    Sphere(Vec3 center, value_type radius, Material* material_pointer) : center_{center},
+    Sphere(BoundVec3 center, value_type radius, Material* material_pointer) : center_{center},
     radius_{radius}, material_pointer_{material_pointer} {}
 
     // Determines whether a ray has hit a sphere in the boundaries (minimum, maximum)
@@ -34,7 +34,7 @@ public:
             record.material_pointer = material_pointer_;
             return true;
         }
-        const value_type hit_point_two = (-b + std::sqrt(discriminant)) / (2.0 * a);
+        const value_type hit_point_two = (-b + std::sqrt(discriminant)) / a;
         if (hit_point_two > t_min && hit_point_two < t_max) {
             record.hit_point = hit_point_two;
             record.point_at_parameter = ray.point_at_parameter(hit_point_two);
@@ -45,8 +45,11 @@ public:
         return false;
     }
 private:
+    // The center of the sphere.
     const FreeVec3 center_;
+    // The radius of the sphere.
     const value_type radius_;
+    // The material surface of the sphere.
     Material* material_pointer_;
 };
 #endif //RAYTRACING_SPHERE_H

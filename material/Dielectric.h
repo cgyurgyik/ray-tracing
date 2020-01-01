@@ -13,7 +13,7 @@ enum DIELECTRIC_MATERIAL_REFRACTIVE_INDEX {
 };
 
 // Returns the estimated refractive index for each dielectric material.
-value_type determine_refractive_index(DIELECTRIC_MATERIAL_REFRACTIVE_INDEX refractive_index) {
+value_type get_refractive_index(DIELECTRIC_MATERIAL_REFRACTIVE_INDEX refractive_index) {
     switch (refractive_index) {
         case DIELECTRIC_MATERIAL_REFRACTIVE_INDEX::AIR : return 1.0;
         case DIELECTRIC_MATERIAL_REFRACTIVE_INDEX::GLASS_LOWER : return 1.3;
@@ -29,7 +29,7 @@ value_type determine_refractive_index(DIELECTRIC_MATERIAL_REFRACTIVE_INDEX refra
 class Dielectric : public Material {
 public:
     explicit Dielectric(DIELECTRIC_MATERIAL_REFRACTIVE_INDEX refractive_index) :
-    refractive_index_{determine_refractive_index(refractive_index)} {}
+    refractive_index_{get_refractive_index(refractive_index)} {}
 
     // Simple polynomial approximation for glass reflectivity produced
     // by Christophe Schlick.
@@ -57,7 +57,7 @@ public:
         UnitVec3 outward_normal;
         const UnitVec3 reflected = reflect(ray_in.direction(), record.normal);
         value_type ni_over_nt;
-        attenuation = Color3(1.0, 1.0, 0.0);
+        attenuation = Color3(1.0, 1.0, 1.0);
         UnitVec3 refracted;
 
         value_type reflect_probability;
@@ -66,15 +66,15 @@ public:
         const value_type dot_r_n = ray_in.direction().to_free().dot(record.normal);
         if (dot_r_n > 0.0) {
             outward_normal = UnitVec3(-record.normal);
-            ni_over_nt = 1.0 / refractive_index_;
+            ni_over_nt = refractive_index_;
             cosine = refractive_index_ * dot_r_n;
         } else {
             outward_normal = UnitVec3(record.normal);
-            ni_over_nt = refractive_index_;
+            ni_over_nt = 1.0 / refractive_index_;
             cosine = -dot_r_n;
         }
         const bool is_refracted = refract(ray_in.direction(), outward_normal, ni_over_nt, refracted);
-       reflect_probability = is_refracted ? schlick(cosine) : 1.0;
+        reflect_probability = is_refracted ? schlick(cosine) : 1.0;
 
        if (random_value() < reflect_probability) {
            scattered = Ray(record.point_at_parameter, reflected);

@@ -8,8 +8,8 @@ class Material; // To avoid circularity of dependencies.
 // A record to determine necessary attributes for a hit.
 struct HitRecord {
     value_type hit_point;
-    BoundVec3 point_at_parameter = BoundVec3(0.0,0.0,0.0);
-    FreeVec3 normal = FreeVec3(0.0,0.0,0.0);
+    BoundVec3 point_at_parameter;
+    FreeVec3 normal;
     Material* material_pointer;
 };
 

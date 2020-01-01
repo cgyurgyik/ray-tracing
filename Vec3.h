@@ -8,6 +8,7 @@
 using value_type = double;
 
 // Represents a Euclidean vector in 3-dimensional space.
+// If no arguments are provided, defaults to (0.0, 0.0, 0.0).
 // Assumes vectors take the form of:
 //      [x]
 //      [y]
@@ -45,6 +46,7 @@ private:
 
 // A 3-dimensional free vector, which has no initial point. It has two main criteria:
 // (1) direction, and (2) magnitude.
+// If no arguments are provided, defaults to (0.0, 0.0, 0.0).
 struct FreeVec3 : Vec3 {
     using Vec3::Vec3;
 
@@ -113,6 +115,7 @@ inline constexpr FreeVec3 operator/(FreeVec3 v, const value_type scalar) {
 
 // A 3-dimensional bounded vector has a fixed start and end point. It represents a fixed point
 // in space, relative to some frame of reference.
+// If no arguments are provided, defaults to (0.0, 0.0, 0.0).
 struct BoundVec3 : Vec3 {
     using Vec3::Vec3;
 
@@ -149,6 +152,7 @@ inline constexpr BoundVec3 operator-(BoundVec3 v1, const FreeVec3& v2) {
 // Represents a 3-dimensional unit vector, an abstraction over free vectors that guarantees
 // a length of 1. To prevent its length from changing, UnitVec3 does not allow
 // for mutations.
+// If no arguments are provided, defaults to (0.0, 0.0, 0.0).
 struct UnitVec3 {
     UnitVec3() : inner_{FreeVec3(0.0,0.0,0.0)} {}
     UnitVec3(value_type x, value_type y, value_type z)
