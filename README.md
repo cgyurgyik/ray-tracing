@@ -7,3 +7,11 @@ This repository follows the steps from [Ray Tracing In One Weekend](https://rayt
 - Abstract material class to allow for OOP approach to different materials. Current materials include lambertian, metallic, and dielectric (clear).
 - Type safe vector types to mitigate bugs.
 - Positionable camera.
+
+# Examples
+- Six spheres in a triangular formation.
+![Example 1](images/raytracing_example1.png)
+- Reflections on metallic material.
+![Example 2](images/raytracing_example2.png)
+- Three spheres from L to R: Dielectric, Lambertian, Metallic
+![Example 3](images/raytracing_example3.png)
