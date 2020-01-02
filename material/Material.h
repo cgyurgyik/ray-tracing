@@ -4,6 +4,7 @@
 #include "../surfaces/Hittable.h"
 
 // Represents the behavior of material, or how a ray may react to certain materials.
+// If a material does not emit any light, it will emit black: Color3(0.0, 0.0, 0.0).
 class Material {
 public:
     // Incorporates two main ideas:
@@ -20,6 +21,12 @@ public:
     // Since v points inward, 2B will be negated.
     inline UnitVec3 reflect(const UnitVec3& v, const FreeVec3 normal) const {
         return   UnitVec3(v.to_free() - (normal *  2 * normal.dot(v.to_free())));
+    }
+
+    // Represents light emission. If a material emits no light, it will default to
+    // emitting the color black.
+    virtual Color3 emitted(value_type u, value_type v, const BoundVec3& p) const {
+        return Color3(0.0, 0.0, 0.0); /*black*/
     }
 };
 

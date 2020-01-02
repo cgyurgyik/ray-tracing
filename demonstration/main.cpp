@@ -21,17 +21,17 @@ int main() {
     const int max_color = 255;
 
     // Positionable camera.
-    const BoundVec3 look_from(1.0, 1.0, 1.65);
-    const FreeVec3 look_at(0.0, 0.0, -1.0);
+    const BoundVec3 look_from(13.3, 2.0, 3.0);
+    const FreeVec3 look_at(0.0, 0.0, 0.0);
     const FreeVec3 view_up(0.0, 1.0, 0.0);
-    const value_type distance_to_focus = (look_from - look_at).length();
+    const value_type distance_to_focus = 10.0;
     const value_type aperture = 0.0;
     const value_type field_of_view = 20;
     const value_type aspect = value_type(x_pixels)/value_type(y_pixels);
     const Camera camera(look_from, look_at, view_up, field_of_view, aspect, aperture, distance_to_focus);
 
     // World.
-    HittableList *world = three_spheres();
+    HittableList *world = simple_light_fixture();
 
     // Print to the file.
     std::ofstream file;

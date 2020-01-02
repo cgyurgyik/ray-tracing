@@ -5,10 +5,15 @@
 #include "../surfaces/Hittable.h"
 #include "../surfaces/HittableList.h"
 #include "../surfaces/Sphere.h"
+#include "../surfaces/Rectangle_XY.h"
 #include "../utility/Camera.h"
 #include "../material/Lambertian.h"
 #include "../material/Metal.h"
 #include "../material/Dielectric.h"
+#include "../material/ConstantTexture.h"
+#include "../material/CheckerTexture.h"
+#include "../material/DiffuseLight.h"
+
 
 // A number of demonstrations using the provided materials and surfaces.
 
@@ -17,7 +22,7 @@
 HittableList* random_scene() {
     const int num_spheres = 500;
     Hittable** spheres = new Hittable*[num_spheres + 1];
-    spheres[0] = new Sphere(BoundVec3(0.0, -1000.0, 0.0), 1000.0, new Lambertian(Color3(0.5, 0.5, 0.5)));
+    spheres[0] = new Sphere(BoundVec3(0.0, -1000.0, 0.0), 1000.0, new Lambertian(new ConstantTexture(Color3(0.5, 0.5, 0.5))));
 
     int index = 1;
     for (int a = -11; a < 11; ++a) {
@@ -32,7 +37,7 @@ HittableList* random_scene() {
                     r = random_value() * random_value();
                     g = random_value() * random_value();
                     b = random_value() * random_value();
-                    spheres[index++] = new Sphere(center, 0.2, new Lambertian(Color3(r, g, b)));
+                    spheres[index++] = new Sphere(center, 0.2, new Lambertian(new ConstantTexture(Color3(r, g, b))));
                 } else if (choose_material < 0.95) { // Metal
                     r = 0.5 * (1 + random_value());
                     g = 0.5 * (1 + random_value());
@@ -48,10 +53,27 @@ HittableList* random_scene() {
     spheres[index++] = new Sphere(BoundVec3(0.0, 1.0, 0.0), 1.0,
             new Dielectric(DIELECTRIC_MATERIAL_REFRACTIVE_INDEX::GLASS_MID));
     spheres[index++] = new Sphere(BoundVec3(-4.0, 1.0, 0.0), 1.0,
-                                        new Lambertian(Color3(0.4, 0.2, 0.1)));
+                                        new Lambertian(new ConstantTexture(Color3(0.4, 0.2, 0.1))));
     spheres[index++] = new Sphere(BoundVec3(0.0, 1.0, 0.0), 1.0,
                                         new Metal(Color3(0.7, 0.6, 0.5), 0.0));
     return new HittableList(spheres, index);
+}
+
+// Creates a scene with two opposing checkered spheres.
+HittableList* opposing_checkered_spheres() {
+    ConstantTexture* texture1 = new ConstantTexture(Color3(0.2, 0.3, 0.1));
+    ConstantTexture* texture2 = new ConstantTexture(Color3(0.9, 0.9, 0.9));
+    Texture* checker1 = new CheckerTexture(texture1, texture2);
+
+    ConstantTexture* texture11 = new ConstantTexture(Color3(0.7, 0.5, 0.2));
+    ConstantTexture* texture22 = new ConstantTexture(Color3(0.5, 0.5, 0.5));
+    Texture* checker2 = new CheckerTexture(texture11, texture22);
+
+    const int num_surfaces = 2;
+    Hittable **list = new Hittable*[num_surfaces];
+    list[0] = new Sphere(BoundVec3(0.0, -10.0, 0.0), 10.0, new Lambertian(checker1));
+    list[1] = new Sphere(BoundVec3(0.0, 10.0, 0.0), 10.0, new Lambertian(checker2));
+    return new HittableList(list, num_surfaces);
 }
 
 // Creates a scene with three spheres and a background.
@@ -62,7 +84,7 @@ HittableList* three_spheres() {
 
     // Background.
     list[0] = new Sphere(BoundVec3(0.0, -100.5, -1.0), 100.0,
-                         new Lambertian(Color3(0.1, 0.3, 0.01)));
+                         new Lambertian(new ConstantTexture(Color3(0.1, 0.3, 0.01))));
     // (Left) Dielectric material, hollow sphere.
     list[1] = new Sphere(BoundVec3(-1.2, 0.0, -1.0), 0.5,
                          new Dielectric(DIELECTRIC_MATERIAL_REFRACTIVE_INDEX::GLASS_MID));
@@ -70,7 +92,7 @@ HittableList* three_spheres() {
                          new Dielectric(DIELECTRIC_MATERIAL_REFRACTIVE_INDEX::GLASS_MID));
     // (Middle) Lambertian material.
     list[3] = new Sphere(BoundVec3(0.0, 0.0, -1.0), 0.5,
-                         new Lambertian(Color3(0.1, 0.2, 0.5)));
+                         new Lambertian(new ConstantTexture(Color3(0.1, 0.2, 0.5))));
     // (Right) Metallic material.
     list[4] = new Sphere(BoundVec3(1.2, 0.0, -1.0), 0.5,
                          new Metal(Color3(0.5, 0.5, 0.5), /*fuzz=*/0.01));
@@ -86,7 +108,7 @@ HittableList* reflections() {
 
     // Background.
     list[0] = new Sphere(BoundVec3(0.0, -100.5, -1.0), 100.0,
-                         new Lambertian(Color3(0.1, 0.3, 0.01)));
+                         new Lambertian(new ConstantTexture(Color3(0.1, 0.3, 0.01))));
 
     // Centered metallic material.
     const BoundVec3 center(0.0, 0.0, -1.0);
@@ -96,19 +118,19 @@ HittableList* reflections() {
     list[2] = new Sphere(BoundVec3(-0.5, 0.0, 0.0), 0.1,
                          new Dielectric(DIELECTRIC_MATERIAL_REFRACTIVE_INDEX::GLASS_MID));
     list[3] = new Sphere(BoundVec3(0.4, 0.0, 0.0), 0.11,
-                         new Lambertian(Color3(0.3, 0.2, 0.1)));
+                         new Lambertian(new ConstantTexture(Color3(0.3, 0.2, 0.1))));
     list[4] = new Sphere(BoundVec3(0.7, 0.0, 0.0), 0.1,
-                         new Lambertian(Color3(0.5, 0.2, 0.4)));
+                         new Lambertian(new ConstantTexture(Color3(0.5, 0.2, 0.4))));
     list[5] = new Sphere(BoundVec3(1.0, 0.0, 0.0), 0.13,
-                         new Lambertian(Color3(0.1, 0.5, 0.2)));
+                         new Lambertian(new ConstantTexture(Color3(0.1, 0.5, 0.2))));
     list[6] = new Sphere(BoundVec3(0.0, 1.0, 0.0), 0.1,
                          new Metal(Color3(0.5, 0.5, 0.5), /*fuzz=*/0.01));
     list[7] = new Sphere(BoundVec3(0.0, 0.5, 0.5), 0.1,
                          new Metal(Color3(0.2, 0.2, 0.2), /*fuzz=*/0.01));
     list[8] = new Sphere(BoundVec3(-0.5, 0.0, -0.5), 0.101,
-                         new Lambertian(Color3(0.8, 0.6, 0.2)));
+                         new Lambertian(new ConstantTexture(Color3(0.8, 0.6, 0.2))));
     list[9] = new Sphere(BoundVec3(0.9, 0.0, -0.5), 0.11,
-                         new Lambertian(Color3(0.8, 0.8, 0.2)));
+                         new Lambertian(new ConstantTexture(Color3(0.8, 0.8, 0.2))));
     return new HittableList(list, num_surfaces);
 }
 
@@ -122,13 +144,13 @@ HittableList* triangular_formation_spheres() {
 
     // Background.
     list[0] = new Sphere(BoundVec3(0.0, -100.5, -1.0), 100.0,
-                         new Lambertian(Color3(0.1, 0.3, 0.01)));
+                         new Lambertian(new ConstantTexture(Color3(0.1, 0.3, 0.01))));
     // (Back Left) Dielectric material.
     list[1] = new Sphere(BoundVec3(-1.2, 0.0, -1.0), 0.5,
                          new Dielectric(DIELECTRIC_MATERIAL_REFRACTIVE_INDEX::GLASS_MID));
     // (Back Middle) Lambertian material.
     list[2] = new Sphere(BoundVec3(0.0, 0.0, -1.0), 0.5,
-                         new Lambertian(Color3(0.1, 0.2, 0.5)));
+                         new Lambertian(new ConstantTexture(Color3(0.1, 0.2, 0.5))));
     // (Back Right) Metallic material.
     list[3] = new Sphere(BoundVec3(1.2, 0.0, -1.0), 0.5,
                          new Metal(Color3(0.5, 0.5, 0.5), /*fuzz=*/0.01));
@@ -142,6 +164,22 @@ HittableList* triangular_formation_spheres() {
     list[6] = new Sphere(BoundVec3(0.0, 0.0, 0.8), 0.4,
                          new Metal(Color3(0.5, 0.5, 0.5), /*fuzz=*/0.01));
 
+    return new HittableList(list, num_surfaces);
+}
+
+// Creates a simple rectangular light fixture against a sphere.
+HittableList* simple_light_fixture() {
+    ConstantTexture* texture1 = new ConstantTexture(Color3(0.3, 0.3, 0.3));
+    ConstantTexture* texture2 = new ConstantTexture(Color3(0.9, 0.9, 0.9));
+    Texture* checker = new CheckerTexture(texture1, texture2);
+    const int num_surfaces = 4;
+    Hittable **list = new Hittable*[num_surfaces];
+    list[0] = new Sphere(BoundVec3(0.0, -1000.0, 0.0), 1000.0, new Lambertian(new ConstantTexture(Color3(0.1, 0.1, 0.1))));
+    list[1] = new Sphere(BoundVec3(0.0, 2.0, 0.0), 2.0, new Lambertian(checker));
+    list[2] = new Sphere(BoundVec3(0.0, 7.0, 0.0), 2.0, new DiffuseLight(new ConstantTexture(Color3(4.0, 4.0, 4.0))));
+
+    auto rectangle = new Rectangle_XY(/*x0=*/3.0, /*x1=*/5.0, /*y0=*/1.0, /*y1=*/3.0, /*k=*/-2.0, new DiffuseLight(new ConstantTexture(Color3(4.0, 4.0, 4.0))));
+    list[3] = rectangle;
     return new HittableList(list, num_surfaces);
 }
 

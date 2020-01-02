@@ -1,0 +1,22 @@
+#ifndef RAYTRACING_DIFFUSELIGHT_H
+#define RAYTRACING_DIFFUSELIGHT_H
+#include "Material.h"
+#include "Texture.h"
+
+// A light emitting material.
+class DiffuseLight : public Material {
+public:
+    DiffuseLight(const Texture *a) : emit_{a} {}
+
+    virtual bool scatter(const Ray& ray_in, const HitRecord& record, Color3& attenuation, Ray& scattered) const {
+        return false;
+    }
+
+    virtual Color3 emitted(value_type u, value_type v, const BoundVec3& p) const {
+        return emit_->value(u, v, p);
+    }
+private:
+    const Texture* emit_;
+};
+
+#endif //RAYTRACING_DIFFUSELIGHT_H

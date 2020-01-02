@@ -46,15 +46,14 @@ Color3 color(const Ray& ray, Hittable *world, int depth) {
     if (is_world_hit) {
         Ray scattered;
         Color3 attenuation;
+        const Color3 emitted = record.material_pointer->emitted(record.u, record.v, record.point_at_parameter);
         const bool meets_depth_check = depth < 50;  /*MAGIC NUMBER*/
         if (meets_depth_check && record.material_pointer->scatter(ray, record, attenuation, scattered)) {
-            return attenuation * color(scattered, world, depth + 1);
+            return emitted + attenuation * color(scattered, world, depth + 1);
         }
-        return Color3(0.0, 0.0, 0.0);
+        return emitted;
     }
-    const UnitVec3 unit_direction = ray.direction();
-    const value_type t = 0.5 * (unit_direction.y() + 1.0);
-    return Color3(1.0, 1.0, 1.0) * (1.0 - t) + Color3(0.5, 0.7, 1.0) * t;
+    return Color3(0.0, 0.0, 0.0);
 }
 
 #endif //RAYTRACING_UTIL_H

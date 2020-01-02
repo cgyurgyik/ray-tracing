@@ -17,7 +17,7 @@ public:
     // -> = dot((p(t) - C), p(t) - C)) = R^2
     // -> = dot((A + t * B - C), A + t * B - C)) = R^2
     // -> = t^2 * dot(B, B) + 2t * dot(B, A - C) + dot (A - C, A - C) - R^2 = 0
-    bool hit(const Ray& ray, value_type t_min, value_type t_max,
+    virtual bool hit(const Ray& ray, value_type t_min, value_type t_max,
             HitRecord& record) const {
         const BoundVec3 oc = ray.origin() - center_;
         const FreeVec3 direction = ray.direction().to_free();
@@ -32,6 +32,7 @@ public:
             record.point_at_parameter = ray.point_at_parameter(hit_point_one);
             record.normal = (FreeVec3(record.point_at_parameter) - center_) / radius_;
             record.material_pointer = material_pointer_;
+            get_sphere_uv(FreeVec3(record.point_at_parameter - center_) / radius_, record.u, record.v);
             return true;
         }
         const value_type hit_point_two = (-b + std::sqrt(discriminant)) / a;
@@ -40,11 +41,26 @@ public:
             record.point_at_parameter = ray.point_at_parameter(hit_point_two);
             record.normal = (FreeVec3(record.point_at_parameter) - center_) / radius_;
             record.material_pointer = material_pointer_;
+            get_sphere_uv(FreeVec3(record.point_at_parameter - center_) / radius_, record.u, record.v);
             return true;
         }
         return false;
     }
+
+    virtual bool bounding_box(value_type t0, value_type t1, AxisAlignedBoundingBox& box) const {
+        const FreeVec3 radius_vector(radius_, radius_, radius_);
+        box = AxisAlignedBoundingBox(BoundVec3(center_ - radius_vector), BoundVec3(center_ + radius_vector));
+        return true;
+    }
 private:
+    // Used to produce 2-dimensional texture coordinates for a spherical surface.
+    void get_sphere_uv(const FreeVec3& p, value_type& u, value_type& v) const {
+        const value_type phi = atan2(p.z(), p.x());
+        const value_type theta = asin(p.y());
+        u = 1 - (phi + M_PI) / (2 * M_PI);
+        v = (theta + M_PI/2) / M_PI;
+    }
+
     // The center of the sphere.
     const FreeVec3 center_;
     // The radius of the sphere.
