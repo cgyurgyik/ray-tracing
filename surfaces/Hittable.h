@@ -24,6 +24,7 @@ public:
     // first hit.
     virtual bool hit(const Ray& ray, value_type t_min, value_type t_max, HitRecord& record) const = 0;
 
+    // TODO: Documentation.
     virtual bool bounding_box(value_type t0, value_type t1, AxisAlignedBoundingBox& box) const = 0;
 };
 

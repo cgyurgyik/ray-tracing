@@ -77,7 +77,7 @@ public:
         reflect_probability = is_refracted ? schlick(cosine) : 1.0;
 
        if (random_value() < reflect_probability) {
-           scattered = Ray(record.point_at_parameter, reflected);
+           scattered = Ray(record.point_at_parameter, reflected, ray_in.time());
        } else {
            scattered = Ray(record.point_at_parameter, refracted);
        }

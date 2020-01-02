@@ -6,7 +6,7 @@
 // Represents a 3-dimensional sphere. Each sphere has a center and a radius.
 class Sphere : public Hittable {
 public:
-    Sphere(BoundVec3 center, value_type radius, Material* material_pointer) : center_{center},
+    Sphere(const BoundVec3& center, value_type radius, Material* material_pointer) : center_{center},
     radius_{radius}, material_pointer_{material_pointer} {}
 
     // Determines whether a ray has hit a sphere in the boundaries (minimum, maximum)

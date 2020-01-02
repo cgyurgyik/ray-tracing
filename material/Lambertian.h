@@ -16,7 +16,7 @@ public:
     virtual bool scatter(const Ray& ray_in, const HitRecord& record, Color3& attenuation, Ray& scattered) const {
         const BoundVec3 point_at_parameter = record.point_at_parameter;
         const BoundVec3 target = point_at_parameter + record.normal + random_value_in_unit_sphere();
-        scattered = Ray(point_at_parameter, UnitVec3(target - point_at_parameter));
+        scattered = Ray(point_at_parameter, UnitVec3(target - point_at_parameter), ray_in.time());
         attenuation = albedo_->value(0.0, 0.0, record.point_at_parameter);
         return true;
     }

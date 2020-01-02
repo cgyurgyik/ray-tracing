@@ -15,21 +15,23 @@ public:
     // -> x = a_x + t * b_x, and y = a_y + t * b_y.
     // The normal is then calculated to be (0, 0, 1) (z-axis).
     virtual bool hit(const Ray& ray, value_type t0, value_type t1, HitRecord& record) const {
-        const value_type hit_point = (k_ - ray.origin().z()) / ray.direction().z();
-        if (hit_point < t0 || hit_point > t1) return false;
-        const value_type x = ray.origin().x() + ray.direction().x() * hit_point;
-        const value_type y = ray.origin().y() + ray.direction().y() * hit_point;
+        const value_type t = (k_ - ray.origin().z()) / ray.direction().z();
+        if (t < t0 || t > t1) return false;
+        const value_type x = ray.origin().x() + ray.direction().x() * t;
+        const value_type y = ray.origin().y() + ray.direction().y() * t;
         const bool outside_x_bounds = x < x0_ || x > x1_;
         const bool outside_y_bounds = y < y0_ || y > y1_;
         if (outside_x_bounds || outside_y_bounds) return false;
 
         get_rectangle_XY_uv(x, y, record.u, record.v);
-        record.hit_point = hit_point;
-        record.point_at_parameter = ray.point_at_parameter(hit_point);
+        record.hit_point = t;
+        record.point_at_parameter = ray.point_at_parameter(t);
         record.normal = FreeVec3(0, 0, 1);
+        record.material_pointer = material_pointer_;
         return true;
     }
 
+    // TODO: Magic number; either explain or fix.
     virtual bool bounding_box(value_type t0, value_type t1, AxisAlignedBoundingBox& box) const {
         box = AxisAlignedBoundingBox(BoundVec3(x0_, y0_, k_ - 0.0001), BoundVec3(x1_, y1_, k_ + 0.0001));
         return true;
@@ -37,7 +39,7 @@ public:
 
 private:
     // Used to produce 2-dimensional texture coordinates for a rectangular XY aligned surface.
-    void get_rectangle_XY_uv(value_type x, value_type y,value_type& u, value_type& v) const {
+    void get_rectangle_XY_uv(value_type x, value_type y, value_type& u, value_type& v) const {
         u = (x - x0_) / (x1_ - x0_);
         v = (y - y0_) / (y1_ - y0_);
     }

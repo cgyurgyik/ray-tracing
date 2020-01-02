@@ -16,7 +16,7 @@ public:
     virtual bool scatter(const Ray& ray_in, const HitRecord& record, Color3& attenuation, Ray& scattered) const {
         const FreeVec3 reflected = reflect(ray_in.direction(), record.normal).to_free();
         const FreeVec3 fuzzed = FreeVec3(random_value_in_unit_sphere() * fuzz_);
-        scattered = Ray(record.point_at_parameter, UnitVec3(reflected + fuzzed));
+        scattered = Ray(record.point_at_parameter, UnitVec3(reflected + fuzzed), ray_in.time());
         attenuation = albedo_;
         return scattered.direction().to_free().dot(record.normal) > 0;
     }

@@ -10,28 +10,30 @@
 // Note that colors are represented in ASCII.
 int main() {
     // Dimensions for the PPM image.
-    const int x_pixels = 500;
-    const int y_pixels = 200;
+    const int x_pixels = 1100;
+    const int y_pixels = 1100;
 
     // The average number of runs, for antialiasing.
-    const int num_runs = 100;
-
+    const int num_runs = 250;
 
     // 'max_color' represents the maximum color value.
     const int max_color = 255;
 
     // Positionable camera.
-    const BoundVec3 look_from(13.3, 2.0, 3.0);
-    const FreeVec3 look_at(0.0, 0.0, 0.0);
+    const BoundVec3 look_from(278.0, 278.0, -800.0);
+    const FreeVec3 look_at(278.0, 278.0, 0.0);
     const FreeVec3 view_up(0.0, 1.0, 0.0);
     const value_type distance_to_focus = 10.0;
     const value_type aperture = 0.0;
-    const value_type field_of_view = 20;
+    const value_type field_of_view = 40.0;
+    const value_type time0 = 0.0;
+    const value_type time1 = 1.0;
     const value_type aspect = value_type(x_pixels)/value_type(y_pixels);
-    const Camera camera(look_from, look_at, view_up, field_of_view, aspect, aperture, distance_to_focus);
+    const Camera camera(look_from, look_at, view_up, field_of_view, aspect,
+                        aperture, distance_to_focus, time0, time1);
 
     // World.
-    HittableList *world = simple_light_fixture();
+    HittableList *world = cornell_box();
 
     // Print to the file.
     std::ofstream file;

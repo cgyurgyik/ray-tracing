@@ -14,8 +14,10 @@ public:
     // and then half width is calculated by multiplying this by the aspect.
     // From there, we can produce our horizontal, vertical, and lower left corner vectors.
     Camera(const BoundVec3& look_from, const FreeVec3& look_at, const FreeVec3& view_up,
-            value_type field_of_view, value_type aspect, value_type aperture, value_type focus_distance) :
-            field_of_view_{field_of_view}, aspect_{aspect} {
+            value_type field_of_view, value_type aspect, value_type aperture, value_type focus_distance,
+            value_type t0, value_type t1) :
+            field_of_view_{field_of_view}, aspect_{aspect}, time0_{t0}, time1_{t1} {
+
         lens_radius_ = aperture / 2.0;
         origin_ = look_from;
         w_ = UnitVec3(look_from - look_at);
@@ -38,6 +40,7 @@ public:
     Ray getRay(value_type s, value_type t) const {
         const FreeVec3 rd = random_value_in_unit_disk() * lens_radius_;
         const FreeVec3 offset = u_ * rd.x() + v_ * rd.y();
+        const value_type time = time0_ + random_value() * (time1_ - time0_);
         return Ray(origin_ + offset,
                 UnitVec3(lower_left_corner_
                 + (horizontal_ * s)
@@ -78,5 +81,6 @@ private:
     // to describe the camera's orientation.
     UnitVec3 u_, w_;
     FreeVec3 v_;
+    value_type time0_, time1_;
 };
 #endif //RAYTRACING_CAMERA_H

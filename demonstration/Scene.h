@@ -6,6 +6,12 @@
 #include "../surfaces/HittableList.h"
 #include "../surfaces/Sphere.h"
 #include "../surfaces/Rectangle_XY.h"
+#include "../surfaces/Rectangle_XZ.h"
+#include "../surfaces/Rectangle_YZ.h"
+#include "../surfaces/RotateY.h"
+#include "../surfaces/Translate.h"
+#include "../surfaces/Block.h"
+#include "../surfaces/FlipNormals.h"
 #include "../utility/Camera.h"
 #include "../material/Lambertian.h"
 #include "../material/Metal.h"
@@ -177,9 +183,60 @@ HittableList* simple_light_fixture() {
     list[0] = new Sphere(BoundVec3(0.0, -1000.0, 0.0), 1000.0, new Lambertian(new ConstantTexture(Color3(0.1, 0.1, 0.1))));
     list[1] = new Sphere(BoundVec3(0.0, 2.0, 0.0), 2.0, new Lambertian(checker));
     list[2] = new Sphere(BoundVec3(0.0, 7.0, 0.0), 2.0, new DiffuseLight(new ConstantTexture(Color3(4.0, 4.0, 4.0))));
+    list[3] = new Rectangle_XY(/*x0=*/3.0, /*x1=*/5.0, /*y0=*/1.0, /*y1=*/3.0, /*k=*/-2.0,
+                                      new DiffuseLight(new ConstantTexture(Color3(4.0, 4.0, 4.0))));
+    return new HittableList(list, num_surfaces);
+}
 
-    auto rectangle = new Rectangle_XY(/*x0=*/3.0, /*x1=*/5.0, /*y0=*/1.0, /*y1=*/3.0, /*k=*/-2.0, new DiffuseLight(new ConstantTexture(Color3(4.0, 4.0, 4.0))));
-    list[3] = rectangle;
+// Creates the Cornell box.
+//
+//    Positionable camera angles listed below:
+//    const BoundVec3 look_from(278.0, 278.0, -800.0);
+//    const FreeVec3 look_at(278.0, 278.0, 0.0);
+//    const FreeVec3 view_up(0.0, 1.0, 0.0);
+//    const value_type distance_to_focus = 1.0;
+//    const value_type aperture = 0.0;
+//    const value_type field_of_view = 40.0;
+//    const value_type aspect = value_type(x_pixels)/value_type(y_pixels);
+//    const value_type time0 = 0.0;
+//    const value_type time1 = 1.0;
+HittableList* cornell_box() {
+    const int num_surfaces = 8;
+    Hittable** list = new Hittable*[num_surfaces];
+
+    Material *red_material = new Lambertian(new ConstantTexture(Color3(0.65, 0.05, 0.05)));
+    Material *white_material = new Lambertian(new ConstantTexture(Color3(0.73, 0.73, 0.73)));
+    Material *green_material = new Lambertian(new ConstantTexture(Color3(0.12, 0.45, 0.15)));
+    Material *light = new DiffuseLight(new ConstantTexture(Color3(15.0, 15.0, 15.0)));
+
+    // Left wall.
+    list[0] = new FlipNormals(new Rectangle_YZ(0, 555, 0, 555, 555, green_material));
+
+    // Right wall.
+    list[1] = new Rectangle_YZ(0, 555, 0, 555, 0, red_material);
+
+    // Light source.
+    list[2] = new Rectangle_XZ(213, 343, 227, 332, 554, light);
+
+    // Ceiling.
+    list[3] = new FlipNormals(new Rectangle_XZ(0, 555, 0, 555, 555, white_material));
+    list[4] = new Rectangle_XZ(0, 555, 0, 555, 0, white_material);
+
+    // Floor.
+    list[5] = new FlipNormals(new Rectangle_XY(0, 555, 0, 555, 555, white_material));
+
+    // Left block.
+    const auto left_block = new Block(BoundVec3(130.0, 0.0, 65.0), BoundVec3(295.0, 165.0, 230.0), white_material);
+    const auto left_block_offset = FreeVec3(130.0, 0.0, 65.0);
+    const value_type left_block_rotation = -18.0;
+    list[6] = new Translate(new RotateY(left_block, left_block_rotation), left_block_offset);
+
+    // Right block.
+    const auto right_block = new Block(BoundVec3(265.0, 0.0, 295.0), BoundVec3(430.0, 330.0, 460.0), white_material);
+    const auto right_block_offset = FreeVec3(265.0, 0.0, 295.0);
+    const value_type right_block_rotation = 15.0;
+    list[7] = new Translate(new RotateY(right_block, right_block_rotation), right_block_offset);
+
     return new HittableList(list, num_surfaces);
 }
 
