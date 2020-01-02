@@ -4,8 +4,9 @@ This repository follows the steps from [Ray Tracing In One Weekend](https://rayt
 # Features
 - Demonstration using PPM image file. Provides several different "scenes" to play around with as well.
 - Single value_type to allow client to switch between double, float, etc.
-- Abstract material class to allow for OOP approach to different materials. Current materials include lambertian, metallic, and dielectric (clear).
-- Abstract hittable class to allow for different shapes to be included. Currently only supports spheres.
+- Abstract material class to allow for different materials. Current materials include lambertian, metallic, and dielectric (clear).
+- Abstract texture class to allow for different textures. Current textures supported are single-color and checkered pattern.
+- Abstract hittable class to allow for different shapes. Currently supports spheres, rectangles, and blocks.
 - Type safe vectors.
 - Positionable camera with defocus blur.
 
