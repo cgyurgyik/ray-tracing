@@ -2,7 +2,7 @@
 #define RAYTRACING_HITTABLELIST_H
 #include "Hittable.h"
 
-class HittableList : public Hittable {
+class HittableList : public  Hittable {
 public:
     HittableList(Hittable **list, int list_size) : list_size_{list_size}, list_{list} {}
 

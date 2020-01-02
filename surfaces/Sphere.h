@@ -1,6 +1,6 @@
 #ifndef RAYTRACING_SPHERE_H
 #define RAYTRACING_SPHERE_H
-#include "Vec3.h"
+#include "../utility/Vec3.h"
 #include "Hittable.h"
 
 // Represents a 3-dimensional sphere. Each sphere has a center and a radius.

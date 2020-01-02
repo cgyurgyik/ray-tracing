@@ -1,8 +1,8 @@
 #ifndef RAYTRACING_LAMBERTIAN_H
 #define RAYTRACING_LAMBERTIAN_H
 #include "Material.h"
-#include "../Ray.h"
-#include "../util.h"
+#include "../utility/Ray.h"
+#include "../utility/util.h"
 
 // Represents Lambertian (diffusion) case.
 class Lambertian : public Material {

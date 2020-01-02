@@ -1,9 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "Vec3.h"
-#include "HittableList.h"
-#include "Camera.h"
+#include "../utility/Vec3.h"
+#include "../surfaces/HittableList.h"
+#include "../utility/Camera.h"
 #include "Scene.h"
 
 // Demonstration that creates a P3 PPM File.

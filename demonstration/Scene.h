@@ -1,14 +1,16 @@
 #ifndef RAYTRACING_SCENE_H
 #define RAYTRACING_SCENE_H
 #include <vector>
-#include "Vec3.h"
-#include "Hittable.h"
-#include "HittableList.h"
-#include "Sphere.h"
-#include "Camera.h"
-#include "material/Lambertian.h"
-#include "material/Metal.h"
-#include "material/Dielectric.h"
+#include "../utility/Vec3.h"
+#include "../surfaces/Hittable.h"
+#include "../surfaces/HittableList.h"
+#include "../surfaces/Sphere.h"
+#include "../utility/Camera.h"
+#include "../material/Lambertian.h"
+#include "../material/Metal.h"
+#include "../material/Dielectric.h"
+
+// A number of demonstrations using the provided materials and surfaces.
 
 // Produces a random scene with 500 spheres of varying sizes and materials. T
 // Three larger spheres are then placed offset in the center.

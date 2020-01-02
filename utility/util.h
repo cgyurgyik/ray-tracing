@@ -1,12 +1,12 @@
 #ifndef RAYTRACING_UTIL_H
 #define RAYTRACING_UTIL_H
-#include "HittableList.h"
-#include "Sphere.h"
-#include "Hittable.h"
+#include "../surfaces/HittableList.h"
+#include "../surfaces/Sphere.h"
+#include "../surfaces/Hittable.h"
 #include <limits>
 #include <functional>
 #include <random>
-#include "material/Material.h"
+#include "../material/Material.h"
 
 
 // Generates a pseudorandom number between 0.0 and 1.0.

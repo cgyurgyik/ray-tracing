@@ -1,7 +1,7 @@
 #ifndef RAYTRACING_HITTABLE_H
 #define RAYTRACING_HITTABLE_H
-#include "Vec3.h"
-#include "Ray.h"
+#include "../utility/Vec3.h"
+#include "../utility/Ray.h"
 
 class Material; // To avoid circularity of dependencies.
 
