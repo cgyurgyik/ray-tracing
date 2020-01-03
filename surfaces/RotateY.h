@@ -54,10 +54,10 @@ public:
     virtual bool hit(const Ray& ray, value_type t_min, value_type t_max, HitRecord& record) const {
         BoundVec3 origin = ray.origin();
         FreeVec3 direction = ray.direction().to_free();
-        origin.x() = cos_theta_ * ray.origin().x() - sin_theta_ * ray.origin().y();
+        origin.x() = cos_theta_ * ray.origin().x() - sin_theta_ * ray.origin().z();
         origin.z() = sin_theta_ * ray.origin().x() + cos_theta_ * ray.origin().z();
 
-        direction.x() = cos_theta_ * ray.direction().x() - sin_theta_ * ray.direction().y();
+        direction.x() = cos_theta_ * ray.direction().x() - sin_theta_ * ray.direction().z();
         direction.z() = sin_theta_ * ray.direction().x() + cos_theta_ * ray.direction().z();
 
         const Ray rotated_ray(origin, UnitVec3(direction), ray.time());

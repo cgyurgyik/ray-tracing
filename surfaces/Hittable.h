@@ -13,6 +13,7 @@ struct HitRecord {
     FreeVec3 normal;
     value_type u; // Used for 2-dimensional
     value_type v; // texture maps.
+    // TODO: Implement this as a shared pointer.
     Material* material_pointer;
 };
 

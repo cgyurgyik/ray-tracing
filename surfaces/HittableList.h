@@ -2,6 +2,7 @@
 #define RAYTRACING_HITTABLELIST_H
 #include "Hittable.h"
 
+// TODO: Use a vector instead of an array.
 class HittableList : public Hittable {
 public:
     HittableList(Hittable **list, int list_size) : list_size_{list_size}, list_{list} {}

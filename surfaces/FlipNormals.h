@@ -8,7 +8,7 @@ public:
     FlipNormals(Hittable *hittable_pointer) : hittable_pointer_{hittable_pointer} {}
 
     virtual bool hit(const Ray& ray, value_type t_min, value_type t_max, HitRecord& record) const {
-        if (hittable_pointer_->hit(ray, t_max, t_max, record)) {
+        if (hittable_pointer_->hit(ray, t_min, t_max, record)) {
             record.normal = -record.normal;
             return true;
         }

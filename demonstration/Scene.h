@@ -22,6 +22,8 @@
 
 
 // A number of demonstrations using the provided materials and surfaces.
+// TODO: Eventually, want to create a scene object that also accounts for
+//       Camera angles, objects, and background.
 
 // Produces a random scene with 500 spheres of varying sizes and materials. T
 // Three larger spheres are then placed offset in the center.
@@ -66,6 +68,13 @@ HittableList* random_scene() {
 }
 
 // Creates a scene with two opposing checkered spheres.
+//
+// Positionable camera:
+// vec3 look_from(13,2,3);
+// vec3 look_at(0,0,0);
+// float dist_to_focus = 10.0;
+// float aperture = 0.0;
+// time0: 0.0, time1: 1.0
 HittableList* opposing_checkered_spheres() {
     ConstantTexture* texture1 = new ConstantTexture(Color3(0.2, 0.3, 0.1));
     ConstantTexture* texture2 = new ConstantTexture(Color3(0.9, 0.9, 0.9));
@@ -207,7 +216,7 @@ HittableList* cornell_box() {
     Material *red_material = new Lambertian(new ConstantTexture(Color3(0.65, 0.05, 0.05)));
     Material *white_material = new Lambertian(new ConstantTexture(Color3(0.73, 0.73, 0.73)));
     Material *green_material = new Lambertian(new ConstantTexture(Color3(0.12, 0.45, 0.15)));
-    Material *light = new DiffuseLight(new ConstantTexture(Color3(15.0, 15.0, 15.0)));
+    Material *light = new DiffuseLight(new ConstantTexture(Color3(7.0, 7.0, 7.0)));
 
     // Left wall.
     list[0] = new FlipNormals(new Rectangle_YZ(0, 555, 0, 555, 555, green_material));
@@ -216,23 +225,20 @@ HittableList* cornell_box() {
     list[1] = new Rectangle_YZ(0, 555, 0, 555, 0, red_material);
 
     // Light source.
-    list[2] = new Rectangle_XZ(213, 343, 227, 332, 554, light);
+    list[2] = new Rectangle_XZ(113, 443, 127, 432, 554, light);
 
-    // Ceiling.
     list[3] = new FlipNormals(new Rectangle_XZ(0, 555, 0, 555, 555, white_material));
     list[4] = new Rectangle_XZ(0, 555, 0, 555, 0, white_material);
-
-    // Floor.
     list[5] = new FlipNormals(new Rectangle_XY(0, 555, 0, 555, 555, white_material));
 
     // Left block.
-    const auto left_block = new Block(BoundVec3(130.0, 0.0, 65.0), BoundVec3(295.0, 165.0, 230.0), white_material);
+    const auto left_block = new Block(BoundVec3(0.0, 0.0, 0.0), BoundVec3(165.0, 165.0, 165.0), white_material);
     const auto left_block_offset = FreeVec3(130.0, 0.0, 65.0);
     const value_type left_block_rotation = -18.0;
     list[6] = new Translate(new RotateY(left_block, left_block_rotation), left_block_offset);
 
     // Right block.
-    const auto right_block = new Block(BoundVec3(265.0, 0.0, 295.0), BoundVec3(430.0, 330.0, 460.0), white_material);
+    const auto right_block = new Block(BoundVec3(0.0, 0.0, 0.0), BoundVec3(165.0, 330.0, 165.0), white_material);
     const auto right_block_offset = FreeVec3(265.0, 0.0, 295.0);
     const value_type right_block_rotation = 15.0;
     list[7] = new Translate(new RotateY(right_block, right_block_rotation), right_block_offset);

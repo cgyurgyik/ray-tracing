@@ -3,7 +3,7 @@
 
 #include "../utility/Vec3.h"
 
-// Represents the colors on a surface procedural.
+// Encapsulates the color value on a surface procedural.
 class Texture {
 public:
     virtual Color3 value(value_type u, value_type v, const BoundVec3& p) const = 0;
