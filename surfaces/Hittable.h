@@ -13,8 +13,7 @@ struct HitRecord {
     FreeVec3 normal;
     value_type u; // Used for 2-dimensional
     value_type v; // texture maps.
-    // TODO: Implement this as a shared pointer.
-    Material* material_pointer;
+    std::shared_ptr<Material> material;
 };
 
 // Represents an object with a hittable surface.
@@ -27,6 +26,8 @@ public:
 
     // TODO: Documentation.
     virtual bool bounding_box(value_type t0, value_type t1, AxisAlignedBoundingBox& box) const = 0;
+
+    // TODO: Implement destructors.
 };
 
 #endif //RAYTRACING_HITTABLE_H

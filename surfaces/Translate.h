@@ -4,7 +4,7 @@
 #include "HittableList.h"
 #include "FlipNormals.h"
 
-// Represents a translation on a hittable object.
+// Encapsulates a translation on a hittable object.
 class Translate : public Hittable {
 public:
     Translate(Hittable* hittable_pointer, const FreeVec3& offset) :

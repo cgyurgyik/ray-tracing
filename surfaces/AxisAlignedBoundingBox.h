@@ -3,6 +3,7 @@
 #include "../utility/Vec3.h"
 #include "../utility/Ray.h"
 
+// Avoids unnecessary checks such as NaN.
 inline value_type get_min(value_type a, value_type b) { return a < b ? a : b; }
 inline value_type get_max(value_type a, value_type b) { return a > b ? a : b; }
 
@@ -29,7 +30,7 @@ public:
     bool hit(const Ray& ray, value_type t_min, value_type t_max) const {
         const value_type inv_x_direction  = 1.0 / ray.direction().x();
         const value_type x_min = get_min(min_.x() - ray.origin().x() * inv_x_direction,
-                max_.x() - ray.origin().x() * inv_x_direction);
+                                         max_.x() - ray.origin().x() * inv_x_direction);
         const value_type x_max = get_max(min_.x() - ray.origin().x() / ray.direction().x(),
                                          max_.x() - ray.origin().x() / ray.direction().x());
 

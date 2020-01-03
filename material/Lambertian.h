@@ -8,7 +8,7 @@
 // Represents Lambertian (diffusion) case.
 class Lambertian : public Material {
 public:
-    explicit Lambertian(Texture* albedo) : albedo_{albedo} {}
+    explicit Lambertian(std::shared_ptr<Texture> albedo) : albedo_{albedo} {}
 
     // There are two circumstances with the Lambertian scatter case:
     // 1. Scatter always and attenuate by its reflectance R.
@@ -17,11 +17,11 @@ public:
         const BoundVec3 point_at_parameter = record.point_at_parameter;
         const BoundVec3 target = point_at_parameter + record.normal + random_value_in_unit_sphere();
         scattered = Ray(point_at_parameter, UnitVec3(target - point_at_parameter), ray_in.time());
-        attenuation = albedo_->value(0.0, 0.0, record.point_at_parameter);
+        attenuation = albedo_->value(record.u, record.v, point_at_parameter);
         return true;
     }
 private:
-    Texture* albedo_;
+    std::shared_ptr<Texture> albedo_;
 };
 
 #endif //RAYTRACING_LAMBERTIAN_H

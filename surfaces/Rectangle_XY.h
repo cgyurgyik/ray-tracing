@@ -7,8 +7,8 @@
 // This means the plane is defined by its z value, i.e. z = k.
 class Rectangle_XY : public Hittable {
 public:
-    Rectangle_XY(value_type x0, value_type x1, value_type y0, value_type y1, value_type k, Material* material_pointer) :
-    x0_{x0}, x1_{x1}, y0_{y0}, y1_{y1}, k_{k}, material_pointer_{material_pointer} {}
+    Rectangle_XY(value_type x0, value_type x1, value_type y0, value_type y1, value_type k, std::shared_ptr<Material> material) :
+    x0_{x0}, x1_{x1}, y0_{y0}, y1_{y1}, k_{k}, material_{material} {}
 
     // It is considered a hit if x0_ x < x1_ and y0_ < y < y1_.
     // Recall z = k_. We can calculate t = (k - a_z) / b_z.
@@ -23,11 +23,12 @@ public:
         const bool outside_y_bounds = y < y0_ || y > y1_;
         if (outside_x_bounds || outside_y_bounds) return false;
 
-        get_rectangle_XY_uv(x, y, record.u, record.v);
+        record.u = (x - x0_) / (x1_ - x0_);
+        record.v = (y - y0_) / (y1_ - y0_);
         record.hit_point = t;
         record.point_at_parameter = ray.point_at_parameter(t);
         record.normal = FreeVec3(0, 0, 1);
-        record.material_pointer = material_pointer_;
+        record.material = material_;
         return true;
     }
 
@@ -38,17 +39,11 @@ public:
     }
 
 private:
-    // Used to produce 2-dimensional texture coordinates for a rectangular XY aligned surface.
-    void get_rectangle_XY_uv(value_type x, value_type y, value_type& u, value_type& v) const {
-        u = (x - x0_) / (x1_ - x0_);
-        v = (y - y0_) / (y1_ - y0_);
-    }
-
     // x0_, x1_, y0_, y1_ are the four corner points.
     // k_ is the z-coordinate.
     const value_type x0_, x1_, y0_, y1_, k_;
     // The associated material of the rectangular surface.
-    Material* material_pointer_;
+    std::shared_ptr<Material> material_;
 };
 
 #endif //RAYTRACING_RECTANGLE_XY_H

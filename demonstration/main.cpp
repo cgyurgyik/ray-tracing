@@ -14,7 +14,7 @@ int main() {
     const int y_pixels = 200;
 
     // The average number of runs, for antialiasing.
-    const int num_runs = 500;
+    const int num_runs = 50;
 
     // 'max_color' represents the maximum color value.
     const int max_color = 255;
@@ -33,7 +33,7 @@ int main() {
                         aperture, distance_to_focus, time0, time1);
 
     // World.
-    HittableList *world = cornell_box();
+    auto world = cornell_box();
 
     // Print to the file.
     std::ofstream file;
@@ -54,7 +54,7 @@ int main() {
         for (int i = 0; i < x_pixels; ++i) {
             Color3 current_color;
 
-            Camera::antialiasing(current_color, camera, world,
+            Camera::antialiasing(current_color, camera, world.get(),
                     num_runs, x_pixels, y_pixels, i, j, depth);
             Camera::dampen(current_color);
 

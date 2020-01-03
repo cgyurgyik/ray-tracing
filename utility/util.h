@@ -32,10 +32,10 @@ FreeVec3 random_value_in_unit_disk() {
 // Generates a random value in a unit sphere, where
 // x, y, z are bounded by [-1, 1].
 FreeVec3 random_value_in_unit_sphere() {
-    FreeVec3 v(random_value(), random_value(), random_value());
-    while (v.squared_length() < 1.0) {
-        v = FreeVec3(random_value(), random_value(), random_value()) * 2.0;
-    }
+    FreeVec3 v;
+    do {
+        v = FreeVec3(random_value(), random_value(), random_value()) * 2.0 - FreeVec3(1.0, 1.0, 1.0);
+    } while (v.dot(v) >= 1.0);
     return v;
 }
 
@@ -47,10 +47,10 @@ Color3 color(const Ray& ray, Hittable *world, int depth) {
     if (is_world_hit) {
         Ray scattered;
         Color3 attenuation;
-        const Color3 emitted_light = record.material_pointer->emitted(record.u, record.v, record.point_at_parameter);
+        const Color3 emitted_light = record.material->emitted(record.u, record.v, record.point_at_parameter);
         const bool meets_depth_check = depth < 50;  /*MAGIC NUMBER*/
-        if (meets_depth_check && record.material_pointer->scatter(ray, record, attenuation, scattered)) {
-            return emitted_light + attenuation * color(scattered, world, depth + 1);
+        if (meets_depth_check && record.material->scatter(ray, record, attenuation, scattered)) {
+            return emitted_light + (attenuation * color(scattered, world, depth + 1));
         }
         return emitted_light;
     }

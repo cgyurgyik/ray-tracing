@@ -6,8 +6,8 @@
 // Represents a 3-dimensional sphere. Each sphere has a center and a radius.
 class Sphere : public Hittable {
 public:
-    Sphere(const BoundVec3& center, value_type radius, Material* material_pointer) : center_{center},
-    radius_{radius}, material_pointer_{material_pointer} {}
+    Sphere(const BoundVec3& center, value_type radius, std::shared_ptr<Material> material) : center_{center},
+    radius_{radius}, material_{material} {}
 
     // Determines whether a ray has hit a sphere in the boundaries (minimum, maximum)
     // with the given center and radius. The formula is generated as follows:
@@ -31,7 +31,7 @@ public:
             record.hit_point = hit_point_one;
             record.point_at_parameter = ray.point_at_parameter(hit_point_one);
             record.normal = (FreeVec3(record.point_at_parameter) - center_) / radius_;
-            record.material_pointer = material_pointer_;
+            record.material = material_;
             get_sphere_uv(FreeVec3(record.point_at_parameter - center_) / radius_, record.u, record.v);
             return true;
         }
@@ -40,7 +40,7 @@ public:
             record.hit_point = hit_point_two;
             record.point_at_parameter = ray.point_at_parameter(hit_point_two);
             record.normal = (FreeVec3(record.point_at_parameter) - center_) / radius_;
-            record.material_pointer = material_pointer_;
+            record.material = material_;
             get_sphere_uv(FreeVec3(record.point_at_parameter - center_) / radius_, record.u, record.v);
             return true;
         }
@@ -66,6 +66,6 @@ private:
     // The radius of the sphere.
     const value_type radius_;
     // The material surface of the sphere.
-    Material* material_pointer_;
+    std::shared_ptr<Material> material_;
 };
 #endif //RAYTRACING_SPHERE_H

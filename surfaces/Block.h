@@ -6,22 +6,24 @@
 #include "Rectangle_XY.h"
 #include "Rectangle_YZ.h"
 #include "FlipNormals.h"
+#include <vector>
 
 // Represents an axis aligned block. Each of the 6 sides is a rectangle.
 class Block : public Hittable {
 public:
-    Block(const BoundVec3& p0, const BoundVec3& p1, Material* material_pointer) {
+    Block(const BoundVec3& p0, const BoundVec3& p1, std::shared_ptr<Material> material) {
         p_min_ = p0;
         p_max_ = p1;
-        Hittable** list = new Hittable*[number_of_sides_]; // 6 sides.
-        list[0] = new Rectangle_XY(p0.x(), p1.x(), p0.y(), p1.y(), p0.z(), material_pointer);
-        list[1] = new FlipNormals(new Rectangle_XY(p0.x(), p1.x(), p0.y(), p1.y(), p0.z(), material_pointer));
-        list[2] = new Rectangle_XZ(p0.x(), p1.x(), p0.z(), p1.z(), p1.y(), material_pointer);
-        list[3] = new FlipNormals(new Rectangle_XZ(p0.x(), p1.x(), p0.z(), p1.z(), p0.y(), material_pointer));
-        list[4] = new Rectangle_YZ(p0.y(), p1.y(), p0.z(), p1.z(), p1.x(), material_pointer);
-        list[5] = new FlipNormals(new Rectangle_YZ(p0.y(), p1.y(), p0.z(), p1.z(), p0.x(), material_pointer));
 
-        list_pointer_ = new HittableList(list, number_of_sides_);
+        hittable_list_ = std::make_unique<HittableList>(HittableList());
+        hittable_list_->hittables_.push_back(std::make_unique<Rectangle_XY>(Rectangle_XY(p0.x(), p1.x(), p0.y(), p1.y(), p0.z(), material)));
+        hittable_list_->hittables_.push_back(std::make_unique<FlipNormals>(FlipNormals(new Rectangle_XY(p0.x(), p1.x(), p0.y(), p1.y(), p0.z(), material))));
+        hittable_list_->hittables_.push_back(std::make_unique<Rectangle_XZ>(Rectangle_XZ(p0.x(), p1.x(), p0.z(), p1.z(), p1.y(), material)));
+        hittable_list_->hittables_.push_back(std::make_unique<FlipNormals>(FlipNormals(new Rectangle_XZ(p0.x(), p1.x(), p0.z(), p1.z(), p0.y(), material))));
+        hittable_list_->hittables_.push_back(std::make_unique<Rectangle_YZ>(Rectangle_YZ(p0.y(), p1.y(), p0.z(), p1.z(), p1.x(), material)));
+        hittable_list_->hittables_.push_back(std::make_unique<FlipNormals>(FlipNormals(new Rectangle_YZ(p0.y(), p1.y(), p0.z(), p1.z(), p0.x(), material))));
+
+        list_pointer_ = hittable_list_.get();
     }
     virtual bool hit(const Ray& ray, value_type t0, value_type t1, HitRecord& record) const {
         return list_pointer_->hit(ray, t0, t1, record);
@@ -36,5 +38,6 @@ private:
     BoundVec3 p_max_;
     Hittable* list_pointer_;
     const int number_of_sides_ = 6;
+    std::unique_ptr<HittableList> hittable_list_;
 };
 #endif //RAYTRACING_BLOCK_H
