@@ -5,7 +5,6 @@ This repository follows the steps from [Ray Tracing In One Weekend](https://rayt
 - Unit testing.
 - Create Scene object to manage camera angle, objects, and background.
 - Update AABB to use Andrew Kensler's faster method using  std::swap().
-- For HittableList, change it to HittableCollection and use std::vector.
 - Look into magic number cases and either change or document appropriately.
 - Create Triangle object and Pyramid object. Test accordingly.
 
