@@ -184,6 +184,7 @@ inline constexpr FreeVec3 operator/(const UnitVec3& v, const value_type scalar) 
 //      [red]
 //      [green]
 //      [blue]
+// Each color should be within the bounds [0.0, 1.0].
 struct Color3  {
 public:
     Color3() : r_{0.0}, g_{0.0}, b_{0.0} {}

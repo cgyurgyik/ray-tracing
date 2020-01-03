@@ -2,14 +2,24 @@
 #include <fstream>
 #include <vector>
 #include "../utility/Vec3.h"
-#include "../surfaces/HittableList.h"
+#include "../surfaces/HittableCollection.h"
 #include "../utility/Camera.h"
 #include "Scene.h"
 
-// Demonstration that creates a P3 PPM File.
+// The necessary metadata required to generate P3 PPM file.
 // Note that colors are represented in ASCII.
-int main() {
+struct P3_PPM_Image_Metadata {
     // Dimensions for the PPM image.
+    int x_pixels, y_pixels;
+    // The number of runs for antialiasing.
+    int number_of_runs;
+    // The maximum color value.
+    int max_color;
+};
+
+// A demonstration that generates a PPM file named "raytracing_demo.ppm"
+// using the current Scene.
+int main() {
     const int x_pixels = 200;
     const int y_pixels = 200;
 
@@ -19,21 +29,8 @@ int main() {
     // 'max_color' represents the maximum color value.
     const int max_color = 255;
 
-    // Positionable camera.
-    const BoundVec3 look_from(278.0, 278.0, -800.0);
-    const FreeVec3 look_at(278.0, 278.0, 0.0);
-    const FreeVec3 view_up(0.0, 1.0, 0.0);
-    const value_type distance_to_focus = 10.0;
-    const value_type aperture = 0.0;
-    const value_type field_of_view = 40.0;
-    const value_type time0 = 0.0;
-    const value_type time1 = 1.0;
-    const value_type aspect = value_type(x_pixels)/value_type(y_pixels);
-    const Camera camera(look_from, look_at, view_up, field_of_view, aspect,
-                        aperture, distance_to_focus, time0, time1);
-
-    // World.
-    auto world = cornell_box();
+    // Scene.
+    Scene scene = cornell_box(x_pixels, y_pixels);
 
     // Print to the file.
     std::ofstream file;
@@ -54,7 +51,7 @@ int main() {
         for (int i = 0; i < x_pixels; ++i) {
             Color3 current_color;
 
-            Camera::antialiasing(current_color, camera, world.get(),
+            Camera::antialiasing(current_color, scene.camera.get(), scene.world.get(),
                     num_runs, x_pixels, y_pixels, i, j, depth);
             Camera::dampen(current_color);
 

@@ -1,11 +1,12 @@
-#ifndef RAYTRACING_HITTABLELIST_H
-#define RAYTRACING_HITTABLELIST_H
+#ifndef RAYTRACING_HITTABLECOLLECTION_H
+#define RAYTRACING_HITTABLECOLLECTION_H
 #include "Hittable.h"
 #include <vector>
 
-class HittableList : public Hittable {
+// Encapsulates a collection of hittables.
+class HittableCollection : public Hittable {
 public:
-    HittableList() {};
+    HittableCollection() {}
 
     bool hit(const Ray &ray, value_type t_min, value_type t_max, HitRecord &record) const {
         HitRecord temp_record;
@@ -36,7 +37,8 @@ public:
         return true;
     }
 
-    std::vector<std::unique_ptr<Hittable>> hittables_;
+    // Stores the pointer to each hittable.
+    std::vector<std::shared_ptr<Hittable>> hittables_;
 };
 
-#endif //RAYTRACING_HITTABLELIST_H
+#endif //RAYTRACING_HITTABLECOLLECTION_H

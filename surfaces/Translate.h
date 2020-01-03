@@ -1,7 +1,7 @@
 #ifndef RAYTRACING_TRANSLATE_H
 #define RAYTRACING_TRANSLATE_H
 #include "Hittable.h"
-#include "HittableList.h"
+#include "HittableCollection.h"
 #include "FlipNormals.h"
 
 // Encapsulates a translation on a hittable object.
