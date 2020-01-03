@@ -19,7 +19,7 @@ This repository follows the steps from [Ray Tracing In One Weekend](https://rayt
 - Positionable camera with defocus blur.
 
 # Examples
-- The Cornell box.
+- The Cornell Box. [[Reference](https://www.graphics.cornell.edu/online/box/history.html)]
 ![Example 1](images/raytracing_example5.png)
 - Six spheres in a triangular formation.
 ![Example 2](images/raytracing_example1.png)
