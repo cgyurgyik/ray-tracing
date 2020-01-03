@@ -1,6 +1,14 @@
 # About
 This repository follows the steps from [Ray Tracing In One Weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html#overview). It also includes talking points from the blogpost about [Type-Safe Ray Tracing](https://ajeetdsouza.github.io/blog/posts/type-safe-raytracing-in-modern-cpp/).
 
+# TODOs:
+- Unit testing.
+- Create Scene object to manage camera angle, objects, and background.
+- Update AABB to use Andrew Kensler's faster method using  std::swap().
+- Wrap material pointers in a shared pointer.
+- For HittableList, change it to HittableCollection and use std::vector.
+- Look into magic number cases and either change or document appropriately.
+
 # Features
 - Demonstration using PPM image file. Provides several different "scenes" to play around with as well.
 - Single value_type to allow client to switch between double, float, etc.
