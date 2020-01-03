@@ -5,7 +5,6 @@ This repository follows the steps from [Ray Tracing In One Weekend](https://rayt
 - Unit testing.
 - Create Scene object to manage camera angle, objects, and background.
 - Update AABB to use Andrew Kensler's faster method using  std::swap().
-- Wrap material pointers in a shared pointer.
 - For HittableList, change it to HittableCollection and use std::vector.
 - Look into magic number cases and either change or document appropriately.
 - Create Triangle object and Pyramid object. Test accordingly.
@@ -20,9 +19,9 @@ This repository follows the steps from [Ray Tracing In One Weekend](https://rayt
 - Positionable camera with defocus blur.
 
 # Examples
+- The Cornell box.
+![Example 1](images/raytracing_example5.png)
 - Six spheres in a triangular formation.
-![Example 1](images/raytracing_example1.png)
-- Reflections on metallic material.
-![Example 2](images/raytracing_example2.png)
-- Three spheres from L to R: Dielectric, Lambertian, Metallic
-![Example 3](images/raytracing_example3.png)
+![Example 2](images/raytracing_example1.png)
+- Checkered Texture.
+![Example 3](images/raytracing_example4.png)
