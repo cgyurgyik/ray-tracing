@@ -8,6 +8,7 @@ This repository follows the steps from [Ray Tracing In One Weekend](https://rayt
 - Wrap material pointers in a shared pointer.
 - For HittableList, change it to HittableCollection and use std::vector.
 - Look into magic number cases and either change or document appropriately.
+- Create Triangle object and Pyramid object. Test accordingly.
 
 # Features
 - Demonstration using PPM image file. Provides several different "scenes" to play around with as well.
