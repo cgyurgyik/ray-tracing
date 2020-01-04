@@ -1,7 +1,5 @@
 #ifndef RAYTRACING_SCENE_H
 #define RAYTRACING_SCENE_H
-#include <vector>
-#include <memory>
 #include "../utility/Vec3.h"
 #include "../surfaces/Hittable.h"
 #include "../surfaces/HittableWorld.h"
@@ -44,12 +42,12 @@ Scene cornell_box(int x_pixels, int y_pixels, int maximum_recursion_depth) {
     const value_type time0 = 0.0;
     const value_type time1 = 1.0;
     const value_type aspect = value_type(x_pixels)/value_type(y_pixels);
-    std::unique_ptr<Camera> current_camera = std::make_unique<Camera>(Camera(look_from, look_at, view_up, field_of_view, aspect,
+    auto current_camera = std::make_unique<Camera>(Camera(look_from, look_at, view_up, field_of_view, aspect,
                         aperture, distance_to_focus, time0, time1));
 
     // World.
     const int num_hittables = 8;
-    std::unique_ptr<HittableWorld> hittable_list = std::make_unique<HittableWorld>(HittableWorld(num_hittables));
+    auto hittable_list = std::make_unique<HittableWorld>(HittableWorld(num_hittables));
 
     const auto red_texture = std::make_shared<ConstantTexture>(ConstantTexture(Color3(0.65, 0.05, 0.05)));
     const auto white_texture = std::make_shared<ConstantTexture>(ConstantTexture(Color3(0.73, 0.73, 0.73)));

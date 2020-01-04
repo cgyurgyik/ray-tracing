@@ -291,4 +291,55 @@ inline constexpr Color3 operator/(Color3 v, const value_type scalar) {
     return v /= scalar;
 }
 
+// Represents an orthonormal basis produce using the Z-axis.
+struct OrthonormalBasis3 {
+    OrthonormalBasis3() {axis_.resize(3); }
+
+    inline constexpr FreeVec3 u() const { return this->axis_[0]; }
+    inline constexpr FreeVec3 v() const { return this->axis_[1]; }
+    inline constexpr FreeVec3 w() const { return this->axis_[2]; }
+
+    inline constexpr FreeVec3& u() { return this->axis_[0]; }
+    inline constexpr FreeVec3& v() { return this->axis_[1]; }
+    inline constexpr FreeVec3& w() { return this->axis_[2]; }
+
+    inline constexpr FreeVec3 local(value_type a, value_type b, value_type c) const {
+        return u() * a + v() * b + w() * c;
+    }
+
+    inline constexpr FreeVec3 local(const FreeVec3& a) const {
+        return u() * a.x() + v() * a.y() + w() * a.z();
+    }
+
+    inline constexpr FreeVec3 operator[](int i) const {
+        switch (i) {
+            case 0: return axis_[0];
+            case 1: return axis_[1];
+            case 2: return axis_[2];
+            default: throw std::invalid_argument("OrthonormalBasis3 out of bounds access. "
+                                                 "For OrthonormalBasis3[i], 0 <= i <= 2");
+        }
+    }
+    inline constexpr FreeVec3& operator[](int i) {
+        switch (i) {
+            case 0: return axis_[0];
+            case 1: return axis_[1];
+            case 2: return axis_[2];
+            default: throw std::invalid_argument("OrthonormalBasis3 out of bounds access. "
+                                                 "For OrthonormalBasis3[i], 0 <= i <= 2");
+        }
+    }
+
+    void build_from_w(const UnitVec3& normal) {
+        w() = normal.to_free();
+        FreeVec3 a;
+        if (std::fabs(w().x()) > 0.9) { a = FreeVec3(0, 1, 0); }
+        else { a = FreeVec3(1, 0, 0); }
+        v() = UnitVec3(w().cross(a)).to_free();
+        u() = w().cross(v());
+    }
+private:
+    std::vector<FreeVec3> axis_;
+};
+
 #endif //RAYTRACING_VEC3_H

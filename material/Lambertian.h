@@ -14,9 +14,11 @@ public:
     // 1. Scatter always and attenuate by its reflectance R.
     // 2. Scatter with no attenuation but absorb the fraction (1 - R) of the rays.
     virtual bool scatter(const Ray& ray_in, const HitRecord& record, Color3& attenuation, Ray& scattered) const {
+        OrthonormalBasis3 uvw;
+        uvw.build_from_w(UnitVec3(record.normal));
+        const UnitVec3 direction = UnitVec3(uvw.local(random_cosine_direction()));
         const BoundVec3 point_at_parameter = record.point_at_parameter;
-        const BoundVec3 target = point_at_parameter + record.normal + random_value_in_unit_sphere();
-        scattered = Ray(point_at_parameter, UnitVec3(target - point_at_parameter), ray_in.time());
+        scattered = Ray(point_at_parameter, direction, ray_in.time());
         attenuation = albedo_->value(record.u, record.v, point_at_parameter);
         return true;
     }
