@@ -24,9 +24,9 @@
 // Represents a scene. The world contains the hittables, and the camera contains the necessary angles and times.
 struct Scene {
     // The camera used for the current scene.
-    std::unique_ptr<Camera> camera;
+    std::unique_ptr<const Camera> camera;
     // The necessary surfaces for the current scene that produces the "world".
-    std::unique_ptr<HittableWorld> world;
+    std::unique_ptr<const HittableWorld> world;
     // The maximum allowable recursion depth for coloring.
     int maximum_recursion_depth;
     // TODO: If no light is provided, add background
@@ -54,7 +54,7 @@ Scene cornell_box(int x_pixels, int y_pixels, int maximum_recursion_depth) {
     const auto white_texture = std::make_shared<ConstantTexture>(ConstantTexture(Color3(0.73, 0.73, 0.73)));
     const auto green_texture = std::make_shared<ConstantTexture>(ConstantTexture(Color3(0.12, 0.45, 0.15)));
     const auto light_texture = std::make_shared<ConstantTexture>(ConstantTexture(Color3(1.0, 1.0, 1.0)));
-    
+
     const auto red_material = std::make_shared<Lambertian>(Lambertian(red_texture));
     const auto white_material = std::make_shared<Lambertian>(Lambertian(white_texture));
     const auto green_material = std::make_shared<Lambertian>(Lambertian(green_texture));
@@ -85,18 +85,22 @@ Scene cornell_box(int x_pixels, int y_pixels, int maximum_recursion_depth) {
     hittable_list->add(std::make_shared<FlipNormals>(FlipNormals(back_wall)));
 
     // Left block.
-    const auto left_block = std::make_shared<Block>(Block(BoundVec3(0.0, 0.0, 0.0), BoundVec3(165.0, 165.0, 165.0), white_material));
+    const auto left_block = std::make_shared<Block>(Block(BoundVec3(0.0, 0.0, 0.0), BoundVec3(165.0, 165.0, 165.0),
+                                                    white_material));
     const auto left_block_offset = FreeVec3(130.0, 0.0, 65.0);
     const auto left_block_rotation = std::make_shared<RotateY>(RotateY(left_block, /*angle_in_degrees=*/-18.0));
     hittable_list->add(std::make_shared<Translate>(Translate(left_block_rotation, left_block_offset)));
 
     // Right block.
-    const auto right_block = std::make_shared<Block>(Block(BoundVec3(0.0, 0.0, 0.0), BoundVec3(165.0, 330.0, 165.0), white_material));
+    const auto right_block = std::make_shared<Block>(Block(BoundVec3(0.0, 0.0, 0.0), BoundVec3(165.0, 330.0, 165.0),
+                                                     white_material));
     const auto right_block_offset = FreeVec3(265.0, 0.0, 295.0);
     const auto right_block_rotation = std::make_shared<RotateY>(RotateY(right_block, /*angle_in_degrees=*/15.0));
     hittable_list->add(std::make_shared<Translate>(Translate(right_block_rotation, right_block_offset)));
 
-    return Scene{.camera=std::move(current_camera), .world=std::move(hittable_list), .maximum_recursion_depth=maximum_recursion_depth};
+    return Scene{.camera=std::move(current_camera),
+                 .world=std::move(hittable_list),
+                 .maximum_recursion_depth=maximum_recursion_depth};
 }
 
 #endif //RAYTRACING_SCENE_H
