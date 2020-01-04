@@ -13,7 +13,7 @@ struct HitRecord {
     FreeVec3 normal;
     value_type u; // Used for 2-dimensional
     value_type v; // texture maps.
-    std::shared_ptr<Material> material;
+    std::shared_ptr<const Material> material;
 };
 
 // Represents an object with a hittable surface.

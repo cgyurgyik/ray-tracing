@@ -11,7 +11,7 @@
 // Currently, they will all share the same material.
 class Block : public Hittable {
 public:
-    Block(const BoundVec3& p0, const BoundVec3& p1, std::shared_ptr<Material> material) {
+    Block(const BoundVec3& p0, const BoundVec3& p1, std::shared_ptr<const Material> material) {
         p_min_ = p0;
         p_max_ = p1;
 

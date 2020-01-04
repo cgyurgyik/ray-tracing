@@ -13,7 +13,7 @@ public:
 
     // Adds a hittable surface to the current world.
     // The size also increments.
-    void add(std::shared_ptr<Hittable> hittable) {
+    void add(std::shared_ptr<const Hittable> hittable) {
         hittables_.push_back(hittable);
     }
 
@@ -59,7 +59,7 @@ public:
 
 private:
     // Stores the pointer to each hittable.
-    std::vector<std::shared_ptr<Hittable>> hittables_;
+    std::vector<std::shared_ptr<const Hittable>> hittables_;
 };
 
 #endif //RAYTRACING_HITTABLEWORLD_H

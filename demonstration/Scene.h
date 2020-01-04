@@ -23,7 +23,9 @@
 
 // Represents a scene. The world contains the hittables, and the camera contains the necessary angles and times.
 struct Scene {
+    // The camera used for the current scene.
     std::unique_ptr<Camera> camera;
+    // The necessary surfaces for the current scene that produces the "world".
     std::unique_ptr<HittableWorld> world;
     // The maximum allowable recursion depth for coloring.
     int maximum_recursion_depth;
@@ -48,10 +50,15 @@ Scene cornell_box(int x_pixels, int y_pixels, int maximum_recursion_depth) {
     // World.
     std::unique_ptr<HittableWorld> hittable_list = std::make_unique<HittableWorld>(HittableWorld());
 
-    const auto red_material = std::make_shared<Lambertian>(Lambertian(std::make_shared<ConstantTexture>(ConstantTexture(Color3(0.65, 0.05, 0.05)))));
-    const auto white_material = std::make_shared<Lambertian>(Lambertian(std::make_shared<ConstantTexture>(ConstantTexture(Color3(0.73, 0.73, 0.73)))));
-    const auto green_material = std::make_shared<Lambertian>(Lambertian(std::make_shared<ConstantTexture>(ConstantTexture(Color3(0.12, 0.45, 0.15)))));
-    const auto light = std::make_shared<DiffuseLight>(DiffuseLight(std::make_shared<ConstantTexture>(ConstantTexture(Color3(1.0, 1.0, 1.0)))));
+    const auto red_texture = std::make_shared<ConstantTexture>(ConstantTexture(Color3(0.65, 0.05, 0.05)));
+    const auto white_texture = std::make_shared<ConstantTexture>(ConstantTexture(Color3(0.73, 0.73, 0.73)));
+    const auto green_texture = std::make_shared<ConstantTexture>(ConstantTexture(Color3(0.12, 0.45, 0.15)));
+    const auto light_texture = std::make_shared<ConstantTexture>(ConstantTexture(Color3(1.0, 1.0, 1.0)));
+    
+    const auto red_material = std::make_shared<Lambertian>(Lambertian(red_texture));
+    const auto white_material = std::make_shared<Lambertian>(Lambertian(white_texture));
+    const auto green_material = std::make_shared<Lambertian>(Lambertian(green_texture));
+    const auto light = std::make_shared<DiffuseLight>(DiffuseLight(light_texture));
 
     // Left wall.
     const auto left_wall = std::make_shared<Rectangle_YZ>(Rectangle_YZ(0, 555, 0, 555, 555, green_material));

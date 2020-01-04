@@ -5,7 +5,7 @@
 // Takes a hittable object and flips its normal.
 class FlipNormals : public Hittable {
 public:
-    FlipNormals(std::shared_ptr<Hittable> hittable_pointer) : hittable_pointer_{hittable_pointer} {}
+    FlipNormals(std::shared_ptr<const Hittable> hittable_pointer) : hittable_pointer_{hittable_pointer} {}
 
     virtual bool hit(const Ray& ray, value_type t_min, value_type t_max, HitRecord& record) const {
         if (hittable_pointer_->hit(ray, t_min, t_max, record)) {
@@ -20,7 +20,7 @@ public:
     }
 
 private:
-    std::shared_ptr<Hittable> hittable_pointer_;
+    std::shared_ptr<const Hittable> hittable_pointer_;
 };
 
 #endif //RAYTRACING_FLIPNORMALS_H

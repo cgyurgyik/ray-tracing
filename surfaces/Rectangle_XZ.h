@@ -7,7 +7,7 @@
 // This means the plane is defined by its y value, i.e. y = k.
 class Rectangle_XZ : public Hittable {
 public:
-    Rectangle_XZ(value_type x0, value_type x1, value_type z0, value_type z1, value_type k, std::shared_ptr<Material> material) :
+    Rectangle_XZ(value_type x0, value_type x1, value_type z0, value_type z1, value_type k, std::shared_ptr<const Material> material) :
             x0_{x0}, x1_{x1}, z0_{z0}, z1_{z1}, k_{k}, material_{material} {}
 
     // It is considered a hit if x0_ x < x1_ and z0_ < z < z1_.
@@ -42,7 +42,7 @@ private:
     // k_ is the y-coordinate.
     const value_type x0_, x1_, z0_, z1_, k_;
     // The associated material of the rectangular surface.
-    std::shared_ptr<Material> material_;
+    std::shared_ptr<const Material> material_;
 };
 
 #endif //RAYTRACING_RECTANGLE_XZ_H
