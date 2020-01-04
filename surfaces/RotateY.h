@@ -6,8 +6,8 @@
 // Rotation about the Y axis. Angle should be provided in degrees.
 class RotateY : public Hittable {
 public:
-    RotateY(Hittable* hittable_pointer, value_type angle) : hittable_pointer_{hittable_pointer} {
-        const value_type radians = (M_PI / 180.0) * angle;
+    RotateY(std::shared_ptr<Hittable> hittable_pointer, value_type angle_in_degrees) : hittable_pointer_{hittable_pointer} {
+        const value_type radians = (M_PI / 180.0) * angle_in_degrees;
         sin_theta_ = sin(radians);
         cos_theta_ = cos(radians);
         has_box_ = hittable_pointer->bounding_box(0.0, 1.0, bounding_box_);
@@ -86,7 +86,7 @@ public:
     }
 
 private:
-    Hittable* hittable_pointer_;
+    std::shared_ptr<Hittable> hittable_pointer_;
     value_type sin_theta_;
     value_type cos_theta_;
     bool has_box_;

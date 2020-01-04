@@ -1,12 +1,32 @@
-#ifndef RAYTRACING_HITTABLECOLLECTION_H
-#define RAYTRACING_HITTABLECOLLECTION_H
+#ifndef RAYTRACING_HITTABLEWORLD_H
+#define RAYTRACING_HITTABLEWORLD_H
 #include "Hittable.h"
 #include <vector>
 
 // Encapsulates a collection of hittables.
-class HittableCollection : public Hittable {
+class HittableWorld : public Hittable {
 public:
-    HittableCollection() {}
+    HittableWorld() {}
+
+    // Reserves space for 'size' number of hittables.
+    HittableWorld(int size) {hittables_.reserve(size); }
+
+    // Adds a hittable surface to the current world.
+    // The size also increments.
+    void add(std::shared_ptr<Hittable> hittable) {
+        hittables_.push_back(hittable);
+    }
+
+    // Returns the number of hittables in the current world.
+    size_t size() {
+        return hittables_.size();
+    }
+
+    // Clears the hittable world, removing all hittable surfaces.
+    // The size of the world will be zero.
+    void clear() {
+        hittables_.clear();
+    }
 
     bool hit(const Ray &ray, value_type t_min, value_type t_max, HitRecord &record) const {
         HitRecord temp_record;
@@ -37,8 +57,9 @@ public:
         return true;
     }
 
+private:
     // Stores the pointer to each hittable.
     std::vector<std::shared_ptr<Hittable>> hittables_;
 };
 
-#endif //RAYTRACING_HITTABLECOLLECTION_H
+#endif //RAYTRACING_HITTABLEWORLD_H

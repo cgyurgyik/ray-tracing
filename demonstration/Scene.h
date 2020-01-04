@@ -4,7 +4,7 @@
 #include <memory>
 #include "../utility/Vec3.h"
 #include "../surfaces/Hittable.h"
-#include "../surfaces/HittableCollection.h"
+#include "../surfaces/HittableWorld.h"
 #include "../surfaces/Sphere.h"
 #include "../surfaces/Rectangle_XY.h"
 #include "../surfaces/Rectangle_XZ.h"
@@ -21,15 +21,14 @@
 #include "../material/CheckerTexture.h"
 #include "../material/DiffuseLight.h"
 
-
 // Represents a scene. The world contains the hittables, and the camera contains the necessary angles and times.
 struct Scene {
     std::unique_ptr<Camera> camera;
-    std::unique_ptr<HittableCollection> world;
+    std::unique_ptr<HittableWorld> world;
     // TODO: If no light is provided, add background
 };
 
-// Creates the Cornell Box.
+// Creates the Cornell Box. Aspect is determined by the ('x_pixels' / 'y_pixels').
 Scene cornell_box(int x_pixels, int y_pixels) {
     // Positionable camera.
     const BoundVec3 look_from(278.0, 278.0, -800.0);
@@ -45,7 +44,7 @@ Scene cornell_box(int x_pixels, int y_pixels) {
                         aperture, distance_to_focus, time0, time1));
 
     // World.
-    std::unique_ptr<HittableCollection> hittable_list = std::make_unique<HittableCollection>(HittableCollection());
+    std::unique_ptr<HittableWorld> hittable_list = std::make_unique<HittableWorld>(HittableWorld());
 
     const auto red_material = std::make_shared<Lambertian>(Lambertian(std::make_shared<ConstantTexture>(ConstantTexture(Color3(0.65, 0.05, 0.05)))));
     const auto white_material = std::make_shared<Lambertian>(Lambertian(std::make_shared<ConstantTexture>(ConstantTexture(Color3(0.73, 0.73, 0.73)))));
@@ -53,34 +52,40 @@ Scene cornell_box(int x_pixels, int y_pixels) {
     const auto light = std::make_shared<DiffuseLight>(DiffuseLight(std::make_shared<ConstantTexture>(ConstantTexture(Color3(1.0, 1.0, 1.0)))));
 
     // Left wall.
-    hittable_list->hittables_.push_back(std::make_shared<FlipNormals>(FlipNormals(new Rectangle_YZ(0, 555, 0, 555, 555, green_material))));
+    const auto left_wall = std::make_shared<Rectangle_YZ>(Rectangle_YZ(0, 555, 0, 555, 555, green_material));
+    hittable_list->add(std::make_shared<FlipNormals>(FlipNormals(left_wall)));
 
     // Right wall.
-    hittable_list->hittables_.push_back(std::make_shared<Rectangle_YZ>(Rectangle_YZ(0, 555, 0, 555, 0, red_material)));
+    const auto right_wall = std::make_shared<Rectangle_YZ>(Rectangle_YZ(0, 555, 0, 555, 0, red_material));
+    hittable_list->add(right_wall);
 
     // Light source.
-    hittable_list->hittables_.push_back(std::make_shared<Rectangle_XZ>(Rectangle_XZ(113, 443, 127, 432, 554, light)));
+    const auto light_source = std::make_shared<Rectangle_XZ>(Rectangle_XZ(113, 443, 127, 432, 554, light));
+    hittable_list->add(light_source);
 
     // Ceiling.
-    hittable_list->hittables_.push_back(std::make_shared<Rectangle_XZ>(Rectangle_XZ(0, 555, 0, 555, 555, white_material)));
+    const auto ceiling = std::make_shared<Rectangle_XZ>(Rectangle_XZ(0, 555, 0, 555, 555, white_material));
+    hittable_list->add(ceiling);
 
     // Floor.
-    hittable_list->hittables_.push_back(std::make_shared<Rectangle_XZ>(Rectangle_XZ(0, 555, 0, 555, 0, white_material)));
+    const auto floor = std::make_shared<Rectangle_XZ>(Rectangle_XZ(0, 555, 0, 555, 0, white_material));
+    hittable_list->add(floor);
 
     // Back wall.
-    hittable_list->hittables_.push_back(std::make_shared<FlipNormals>(FlipNormals(new Rectangle_XY(0, 555, 0, 555, 555, white_material))));
+    const auto back_wall = std::make_shared<Rectangle_XY>(Rectangle_XY(0, 555, 0, 555, 555, white_material));
+    hittable_list->add(std::make_shared<FlipNormals>(FlipNormals(back_wall)));
 
     // Left block.
-    const auto left_block = new Block(BoundVec3(0.0, 0.0, 0.0), BoundVec3(165.0, 165.0, 165.0), white_material);
+    const auto left_block = std::make_shared<Block>(Block(BoundVec3(0.0, 0.0, 0.0), BoundVec3(165.0, 165.0, 165.0), white_material));
     const auto left_block_offset = FreeVec3(130.0, 0.0, 65.0);
-    const value_type left_block_rotation = -18.0;
-    hittable_list->hittables_.push_back(std::make_shared<Translate>(Translate(new RotateY(left_block, left_block_rotation), left_block_offset)));
+    const auto left_block_rotation = std::make_shared<RotateY>(RotateY(left_block, /*angle_in_degrees=*/-18.0));
+    hittable_list->add(std::make_shared<Translate>(Translate(left_block_rotation, left_block_offset)));
 
     // Right block.
-    const auto right_block = new Block(BoundVec3(0.0, 0.0, 0.0), BoundVec3(165.0, 330.0, 165.0), white_material);
+    const auto right_block = std::make_shared<Block>(Block(BoundVec3(0.0, 0.0, 0.0), BoundVec3(165.0, 330.0, 165.0), white_material);
     const auto right_block_offset = FreeVec3(265.0, 0.0, 295.0);
-    const value_type right_block_rotation = 15.0;
-    hittable_list->hittables_.push_back(std::make_shared<Translate>(Translate(new RotateY(right_block, right_block_rotation), right_block_offset)));
+    const auto right_block_rotation = std::make_shared<RotateY>(RotateY(right_block, /*angle_in_degrees=*/15.0));
+    hittable_list->add(std::make_shared<Translate>(Translate(right_block_rotation, right_block_offset)));
 
     return Scene{.camera=std::move(current_camera), .world=std::move(hittable_list)};
 }

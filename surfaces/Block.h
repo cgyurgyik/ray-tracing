@@ -1,7 +1,7 @@
 #ifndef RAYTRACING_BLOCK_H
 #define RAYTRACING_BLOCK_H
 #include "Hittable.h"
-#include "HittableCollection.h"
+#include "HittableWorld.h"
 #include "Rectangle_XZ.h"
 #include "Rectangle_XY.h"
 #include "Rectangle_YZ.h"
@@ -16,19 +16,19 @@ public:
         p_min_ = p0;
         p_max_ = p1;
 
-        hittable_list_ = std::make_unique<HittableCollection>(HittableCollection());
-        hittable_list_->hittables_.push_back(std::make_shared<Rectangle_XY>
+        hittable_list_ = std::make_unique<HittableWorld>(HittableWorld(6));
+        hittable_list_->add(std::make_shared<Rectangle_XY>
                 (Rectangle_XY(p0.x(), p1.x(), p0.y(), p1.y(), p0.z(), material)));
-        hittable_list_->hittables_.push_back(std::make_shared<FlipNormals>
-                (FlipNormals(new Rectangle_XY(p0.x(), p1.x(), p0.y(), p1.y(), p0.z(), material))));
-        hittable_list_->hittables_.push_back(std::make_shared<Rectangle_XZ>
+        hittable_list_->add(std::make_shared<FlipNormals>
+                (FlipNormals(std::make_shared<Rectangle_XY>(Rectangle_XY(p0.x(), p1.x(), p0.y(), p1.y(), p0.z(), material)))));
+        hittable_list_->add(std::make_shared<Rectangle_XZ>
                 (Rectangle_XZ(p0.x(), p1.x(), p0.z(), p1.z(), p1.y(), material)));
-        hittable_list_->hittables_.push_back(std::make_shared<FlipNormals>
-                (FlipNormals(new Rectangle_XZ(p0.x(), p1.x(), p0.z(), p1.z(), p0.y(), material))));
-        hittable_list_->hittables_.push_back(std::make_shared<Rectangle_YZ>
+        hittable_list_->add(std::make_shared<FlipNormals>
+                (FlipNormals(std::make_shared<Rectangle_XZ>(Rectangle_XZ(p0.x(), p1.x(), p0.z(), p1.z(), p0.y(), material)))));
+        hittable_list_->add(std::make_shared<Rectangle_YZ>
                 (Rectangle_YZ(p0.y(), p1.y(), p0.z(), p1.z(), p1.x(), material)));
-        hittable_list_->hittables_.push_back(std::make_shared<FlipNormals>
-                (FlipNormals(new Rectangle_YZ(p0.y(), p1.y(), p0.z(), p1.z(), p0.x(), material))));
+        hittable_list_->add(std::make_shared<FlipNormals>
+                (FlipNormals(std::make_shared<Rectangle_YZ>(Rectangle_YZ(p0.y(), p1.y(), p0.z(), p1.z(), p0.x(), material)))));
 
         block_pointer_ = hittable_list_.get();
     }
@@ -44,6 +44,6 @@ private:
     BoundVec3 p_min_;
     BoundVec3 p_max_;
     Hittable* block_pointer_;
-    std::unique_ptr<HittableCollection> hittable_list_;
+    std::unique_ptr<HittableWorld> hittable_list_;
 };
 #endif //RAYTRACING_BLOCK_H

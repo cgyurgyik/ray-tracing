@@ -58,7 +58,7 @@ public:
 
     // To implement anti-aliasing, take the average sample over n trials.
     // This allows for less jagged edges for each surface in the world.
-    static void antialiasing(Color3& current_color, Camera* camera, HittableCollection* world,
+    static void antialiasing(Color3& current_color, Camera* camera, HittableWorld* world,
                       int num_runs, int x_pixels, int y_pixels, int i, int j, int depth) {
         for (int current_run = 0; current_run < num_runs; ++current_run) {
             const value_type u = value_type(i + random_value()) / value_type(x_pixels);

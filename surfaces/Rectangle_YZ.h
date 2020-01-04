@@ -32,7 +32,6 @@ public:
         return true;
     }
 
-    // TODO: Magic number; either explain or fix.
     virtual bool bounding_box(value_type t0, value_type t1, AxisAlignedBoundingBox& box) const {
         box = AxisAlignedBoundingBox(BoundVec3(k_ - 0.0001, y0_, z0_), BoundVec3(k_ + 0.0001, y1_, z1_));
         return true;

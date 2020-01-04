@@ -1,6 +1,6 @@
 #ifndef RAYTRACING_UTIL_H
 #define RAYTRACING_UTIL_H
-#include "../surfaces/HittableCollection.h"
+#include "../surfaces/HittableWorld.h"
 #include "../surfaces/Sphere.h"
 #include "../surfaces/Hittable.h"
 #include <limits>

@@ -2,7 +2,7 @@
 #include <fstream>
 #include <vector>
 #include "../utility/Vec3.h"
-#include "../surfaces/HittableCollection.h"
+#include "../surfaces/HittableWorld.h"
 #include "../utility/Camera.h"
 #include "Scene.h"
 
@@ -30,7 +30,7 @@ int main() {
     const int max_color = 255;
 
     // Scene.
-    Scene scene = cornell_box(x_pixels, y_pixels);
+    const Scene scene = cornell_box(x_pixels, y_pixels);
 
     // Print to the file.
     std::ofstream file;

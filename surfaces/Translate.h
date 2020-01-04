@@ -1,13 +1,13 @@
 #ifndef RAYTRACING_TRANSLATE_H
 #define RAYTRACING_TRANSLATE_H
 #include "Hittable.h"
-#include "HittableCollection.h"
+#include "HittableWorld.h"
 #include "FlipNormals.h"
 
 // Encapsulates a translation on a hittable object.
 class Translate : public Hittable {
 public:
-    Translate(Hittable* hittable_pointer, const FreeVec3& offset) :
+    Translate(std::shared_ptr<Hittable> hittable_pointer, const FreeVec3& offset) :
     hittable_pointer_{hittable_pointer}, offset_{offset} {}
 
     virtual bool hit(const Ray& ray, value_type t_min, value_type t_max, HitRecord& record) const {
@@ -28,7 +28,7 @@ public:
     }
 
 private:
-    Hittable* hittable_pointer_;
+    std::shared_ptr<Hittable> hittable_pointer_;
     FreeVec3 offset_;
 };
 #endif //RAYTRACING_TRANSLATE_H
