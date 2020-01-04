@@ -39,8 +39,10 @@ FreeVec3 random_value_in_unit_sphere() {
     return v;
 }
 
-// TODO: Documentation
-Color3 color(const Ray& ray, Hittable *world, int maximum_depth, int current_depth) {
+// The currently coloring process during the anti-aliasing phase of raytracing.
+// It first determines if the ray has hit. Then, if it is within current recursion boundaries, it proceeds to
+// scatter or emit light. If it is not a hit, then the color Black (0, 0, 0) is returned.
+Color3 color(const Ray& ray, Hittable *world, int maximum_recursion_depth, int current_recursion_depth) {
     HitRecord record;
     const bool is_world_hit = world->hit(ray, /*minimum=*/value_type(0.001),
             /*maximum=*/std::numeric_limits<value_type>::max(), record);
@@ -48,9 +50,9 @@ Color3 color(const Ray& ray, Hittable *world, int maximum_depth, int current_dep
         Ray scattered;
         Color3 attenuation;
         const Color3 emitted_light = record.material->emitted(record.u, record.v, record.point_at_parameter);
-        const bool meets_depth_check = current_depth < maximum_depth;
+        const bool meets_depth_check = current_recursion_depth < maximum_recursion_depth;
         if (meets_depth_check && record.material->scatter(ray, record, attenuation, scattered)) {
-            return emitted_light + (attenuation * color(scattered, world, maximum_depth, current_depth + 1));
+            return emitted_light + (attenuation * color(scattered, world, maximum_recursion_depth, ++current_recursion_depth));
         }
         return emitted_light;
     }

@@ -8,14 +8,14 @@
 
 // The necessary metadata required to generate P3 PPM file.
 // Note that colors are represented in ASCII.
-struct P3_PPM_Image_Metadata {
-    // Dimensions for the PPM image.
-    int x_pixels, y_pixels;
-    // The number of runs for antialiasing.
-    int number_of_runs;
-    // The maximum color value.
-    int max_color;
-};
+//struct P3_PPM_Image_Metadata {
+//    // Dimensions for the PPM image.
+//    int x_pixels, y_pixels;
+//    // The number of runs for antialiasing.
+//    int number_of_runs;
+//    // The maximum color value.
+//    int max_color;
+//};
 
 // A demonstration that generates a PPM file named "raytracing_demo.ppm"
 // using the current Scene.
@@ -55,7 +55,7 @@ int main() {
             Color3 current_color;
 
             Camera::antialiasing(current_color, scene.camera.get(), scene.world.get(),
-                    num_runs, x_pixels, y_pixels, i, j, scene.maximum_depth, current_depth);
+                    num_runs, x_pixels, y_pixels, i, j, scene.maximum_recursion_depth);
             Camera::dampen(current_color);
 
             const int i_red = int(max_color * current_color.r());

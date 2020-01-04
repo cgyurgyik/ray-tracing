@@ -25,12 +25,13 @@
 struct Scene {
     std::unique_ptr<Camera> camera;
     std::unique_ptr<HittableWorld> world;
-    int maximum_depth;
+    // The maximum allowable recursion depth for coloring.
+    int maximum_recursion_depth;
     // TODO: If no light is provided, add background
 };
 
 // Creates the Cornell Box. Aspect is determined by the ('x_pixels' / 'y_pixels').
-Scene cornell_box(int x_pixels, int y_pixels, int maximum_depth) {
+Scene cornell_box(int x_pixels, int y_pixels, int maximum_recursion_depth) {
     // Positionable camera.
     const BoundVec3 look_from(278.0, 278.0, -800.0);
     const FreeVec3 look_at(278.0, 278.0, 0.0);
@@ -88,7 +89,7 @@ Scene cornell_box(int x_pixels, int y_pixels, int maximum_depth) {
     const auto right_block_rotation = std::make_shared<RotateY>(RotateY(right_block, /*angle_in_degrees=*/15.0));
     hittable_list->add(std::make_shared<Translate>(Translate(right_block_rotation, right_block_offset)));
 
-    return Scene{.camera=std::move(current_camera), .world=std::move(hittable_list), .maximum_depth=maximum_depth};
+    return Scene{.camera=std::move(current_camera), .world=std::move(hittable_list), .maximum_recursion_depth=maximum_recursion_depth};
 }
 
 #endif //RAYTRACING_SCENE_H
