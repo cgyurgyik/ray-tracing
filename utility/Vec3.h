@@ -291,7 +291,10 @@ inline constexpr Color3 operator/(Color3 v, const value_type scalar) {
     return v /= scalar;
 }
 
-// Represents an orthonormal basis produce using the Z-axis.
+// Represents an orthonormal basis produced using the v() vector.
+// Here, the location is denoted as O' + uU + vV + wW.
+// We can then produce an orthonormal basis simply by finding
+// u, v, w.
 struct OrthonormalBasis3 {
     OrthonormalBasis3() {axis_.resize(3); }
 
@@ -307,7 +310,7 @@ struct OrthonormalBasis3 {
         return u() * a + v() * b + w() * c;
     }
 
-    inline constexpr FreeVec3 local(const FreeVec3& a) const {
+    inline constexpr FreeVec3 local(const UnitVec3& a) const {
         return u() * a.x() + v() * a.y() + w() * a.z();
     }
 
@@ -330,6 +333,11 @@ struct OrthonormalBasis3 {
         }
     }
 
+    // Produces an orthonormal basis from w. Since direction is not relative
+    // to any origin (i.e. its a free vector), we don't need the origin.
+    // v() is then produced from cross products of previous vectors.
+    // Since a can be any vector that is not zero or parallel to the normal,
+    // we can set it as the x-axis or y-axis, dependent on w()'s x-coordinate.
     void build_from_w(const UnitVec3& normal) {
         w() = normal.to_free();
         FreeVec3 a;

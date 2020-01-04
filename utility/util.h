@@ -39,15 +39,15 @@ FreeVec3 random_value_in_unit_sphere() {
     return v;
 }
 
-// Returns a vector with random cosine direction using spherical coordinates.
-inline FreeVec3 random_cosine_direction() {
+// Returns a unit vector with random cosine direction using spherical coordinates.
+inline UnitVec3 random_cosine_direction() {
     const value_type r1 = random_value();
     const value_type r2 = random_value();
     const value_type z = sqrt(1.0 - r2);
     const value_type phi = 2 * M_PI * r1;
     const value_type x = cos(phi) * std::sqrt(r2);
     const value_type y = sin(phi) * std::sqrt(r2);
-    return FreeVec3(x, y, z);
+    return UnitVec3(x, y, z);
 }
 
 // The currently coloring process during the anti-aliasing phase of raytracing.
