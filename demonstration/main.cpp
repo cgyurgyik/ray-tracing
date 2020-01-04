@@ -8,14 +8,14 @@
 
 // The necessary metadata required to generate P3 PPM file.
 // Note that colors are represented in ASCII.
-//struct P3_PPM_Image_Metadata {
+// struct P3_PPM_Image_Metadata {
 //    // Dimensions for the PPM image.
 //    int x_pixels, y_pixels;
 //    // The number of runs for antialiasing.
 //    int number_of_runs;
 //    // The maximum color value.
 //    int max_color;
-//};
+// };
 
 // A demonstration that generates a PPM file named "raytracing_demo.ppm"
 // using the current Scene.

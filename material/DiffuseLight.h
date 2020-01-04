@@ -1,7 +1,7 @@
 #ifndef RAYTRACING_DIFFUSELIGHT_H
 #define RAYTRACING_DIFFUSELIGHT_H
 #include "Material.h"
-#include "Texture.h"
+#include "texture/Texture.h"
 
 // A light emitting material.
 class DiffuseLight : public Material {

@@ -1,7 +1,7 @@
 #ifndef RAYTRACING_LAMBERTIAN_H
 #define RAYTRACING_LAMBERTIAN_H
 #include "Material.h"
-#include "Texture.h"
+#include "texture/Texture.h"
 #include "../utility/Ray.h"
 #include "../utility/util.h"
 

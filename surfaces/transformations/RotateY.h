@@ -1,6 +1,6 @@
 #ifndef RAYTRACING_ROTATEY_H
 #define RAYTRACING_ROTATEY_H
-#include "Hittable.h"
+#include "../Hittable.h"
 #include <limits>
 
 // Rotation about the Y axis. Angle should be provided in degrees.

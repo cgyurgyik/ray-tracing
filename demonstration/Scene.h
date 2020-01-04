@@ -9,16 +9,16 @@
 #include "../surfaces/Rectangle_XY.h"
 #include "../surfaces/Rectangle_XZ.h"
 #include "../surfaces/Rectangle_YZ.h"
-#include "../surfaces/RotateY.h"
-#include "../surfaces/Translate.h"
+#include "../surfaces/transformations/RotateY.h"
+#include "../surfaces/transformations/Translate.h"
 #include "../surfaces/Block.h"
 #include "../surfaces/FlipNormals.h"
 #include "../utility/Camera.h"
 #include "../material/Lambertian.h"
 #include "../material/Metal.h"
 #include "../material/Dielectric.h"
-#include "../material/ConstantTexture.h"
-#include "../material/CheckerTexture.h"
+#include "../material/texture/ConstantTexture.h"
+#include "../material/texture/CheckerTexture.h"
 #include "../material/DiffuseLight.h"
 
 // Represents a scene. The world contains the hittables, and the camera contains the necessary angles and times.
@@ -48,7 +48,8 @@ Scene cornell_box(int x_pixels, int y_pixels, int maximum_recursion_depth) {
                         aperture, distance_to_focus, time0, time1));
 
     // World.
-    std::unique_ptr<HittableWorld> hittable_list = std::make_unique<HittableWorld>(HittableWorld());
+    const int num_hittables = 8;
+    std::unique_ptr<HittableWorld> hittable_list = std::make_unique<HittableWorld>(HittableWorld(num_hittables));
 
     const auto red_texture = std::make_shared<ConstantTexture>(ConstantTexture(Color3(0.65, 0.05, 0.05)));
     const auto white_texture = std::make_shared<ConstantTexture>(ConstantTexture(Color3(0.73, 0.73, 0.73)));

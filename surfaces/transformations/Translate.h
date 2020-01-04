@@ -1,8 +1,8 @@
 #ifndef RAYTRACING_TRANSLATE_H
 #define RAYTRACING_TRANSLATE_H
-#include "Hittable.h"
-#include "HittableWorld.h"
-#include "FlipNormals.h"
+#include "../Hittable.h"
+#include "../HittableWorld.h"
+#include "../FlipNormals.h"
 
 // Encapsulates a translation on a hittable object.
 class Translate : public Hittable {
