@@ -26,6 +26,23 @@ public:
     inline constexpr value_type& y() { return this->y_; }
     inline constexpr value_type& z() { return this->z_; }
 
+    inline constexpr value_type operator[](int i) const {
+        switch (i) {
+            case 0: return x_;
+            case 1: return y_;
+            case 2: return z_;
+            default: throw std::invalid_argument("Vec3 out of bounds access. For Vec3[i], 0 <= i <= 2");
+        }
+    }
+    inline constexpr value_type& operator[](int i) {
+        switch (i) {
+            case 0: return x_;
+            case 1: return y_;
+            case 2: return z_;
+            default: throw std::invalid_argument("Vec3 out of bounds access. For Vec3[i], 0 <= i <= 2");
+        }
+    }
+
     inline value_type length() const {
         return std::hypot(this->x(), this->y(), this->z());
     }
@@ -185,6 +202,7 @@ inline constexpr FreeVec3 operator/(const UnitVec3& v, const value_type scalar) 
 //      [green]
 //      [blue]
 // Each color should be within the bounds [0.0, 1.0].
+// If no color provided, defaults to (0.0, 0.0, 0.0).
 struct Color3  {
 public:
     Color3() : r_{0.0}, g_{0.0}, b_{0.0} {}
@@ -198,6 +216,23 @@ public:
     inline constexpr value_type& r() { return this->r_; }
     inline constexpr value_type& g() { return this->g_; }
     inline constexpr value_type& b() { return this->b_; }
+
+    inline constexpr value_type operator[](int i) const {
+        switch (i) {
+            case 0: return r_;
+            case 1: return g_;
+            case 2: return b_;
+            default: throw std::invalid_argument("Color3 out of bounds access. For Color3[i], 0 <= i <= 2");
+        }
+    }
+    inline constexpr value_type& operator[](int i) {
+        switch (i) {
+            case 0: return r_;
+            case 1: return g_;
+            case 2: return b_;
+            default: throw std::invalid_argument("Color3 out of bounds access. For Color3[i], 0 <= i <= 2");
+        }
+    }
 
     inline constexpr Color3& operator+=(const Color3& other) {
         this->r() += other.r();
