@@ -39,8 +39,8 @@ FreeVec3 random_value_in_unit_sphere() {
     return v;
 }
 
-// TODO: Documentation, depth magic number.
-Color3 color(const Ray& ray, Hittable *world, int depth) {
+// TODO: Documentation
+Color3 color(const Ray& ray, Hittable *world, int maximum_depth, int current_depth) {
     HitRecord record;
     const bool is_world_hit = world->hit(ray, /*minimum=*/value_type(0.001),
             /*maximum=*/std::numeric_limits<value_type>::max(), record);
@@ -48,9 +48,9 @@ Color3 color(const Ray& ray, Hittable *world, int depth) {
         Ray scattered;
         Color3 attenuation;
         const Color3 emitted_light = record.material->emitted(record.u, record.v, record.point_at_parameter);
-        const bool meets_depth_check = depth < 50;  /*MAGIC NUMBER*/
+        const bool meets_depth_check = current_depth < maximum_depth;
         if (meets_depth_check && record.material->scatter(ray, record, attenuation, scattered)) {
-            return emitted_light + (attenuation * color(scattered, world, depth + 1));
+            return emitted_light + (attenuation * color(scattered, world, maximum_depth, current_depth + 1));
         }
         return emitted_light;
     }

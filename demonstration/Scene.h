@@ -25,11 +25,12 @@
 struct Scene {
     std::unique_ptr<Camera> camera;
     std::unique_ptr<HittableWorld> world;
+    int maximum_depth;
     // TODO: If no light is provided, add background
 };
 
 // Creates the Cornell Box. Aspect is determined by the ('x_pixels' / 'y_pixels').
-Scene cornell_box(int x_pixels, int y_pixels) {
+Scene cornell_box(int x_pixels, int y_pixels, int maximum_depth) {
     // Positionable camera.
     const BoundVec3 look_from(278.0, 278.0, -800.0);
     const FreeVec3 look_at(278.0, 278.0, 0.0);
@@ -65,7 +66,7 @@ Scene cornell_box(int x_pixels, int y_pixels) {
 
     // Ceiling.
     const auto ceiling = std::make_shared<Rectangle_XZ>(Rectangle_XZ(0, 555, 0, 555, 555, white_material));
-    hittable_list->add(ceiling);
+    hittable_list->add(std::make_shared<FlipNormals>(FlipNormals(ceiling)));
 
     // Floor.
     const auto floor = std::make_shared<Rectangle_XZ>(Rectangle_XZ(0, 555, 0, 555, 0, white_material));
@@ -82,12 +83,12 @@ Scene cornell_box(int x_pixels, int y_pixels) {
     hittable_list->add(std::make_shared<Translate>(Translate(left_block_rotation, left_block_offset)));
 
     // Right block.
-    const auto right_block = std::make_shared<Block>(Block(BoundVec3(0.0, 0.0, 0.0), BoundVec3(165.0, 330.0, 165.0), white_material);
+    const auto right_block = std::make_shared<Block>(Block(BoundVec3(0.0, 0.0, 0.0), BoundVec3(165.0, 330.0, 165.0), white_material));
     const auto right_block_offset = FreeVec3(265.0, 0.0, 295.0);
     const auto right_block_rotation = std::make_shared<RotateY>(RotateY(right_block, /*angle_in_degrees=*/15.0));
     hittable_list->add(std::make_shared<Translate>(Translate(right_block_rotation, right_block_offset)));
 
-    return Scene{.camera=std::move(current_camera), .world=std::move(hittable_list)};
+    return Scene{.camera=std::move(current_camera), .world=std::move(hittable_list), .maximum_depth=maximum_depth};
 }
 
 #endif //RAYTRACING_SCENE_H

@@ -6,29 +6,42 @@
 #include "Rectangle_XY.h"
 #include "Rectangle_YZ.h"
 #include "FlipNormals.h"
-#include <vector>
 
 // Represents an axis aligned block. Each of the 6 sides is a rectangle.
-// Currently, They will all share the same material.
+// Currently, they will all share the same material.
 class Block : public Hittable {
 public:
     Block(const BoundVec3& p0, const BoundVec3& p1, std::shared_ptr<Material> material) {
         p_min_ = p0;
         p_max_ = p1;
 
-        hittable_list_ = std::make_unique<HittableWorld>(HittableWorld(6));
-        hittable_list_->add(std::make_shared<Rectangle_XY>
-                (Rectangle_XY(p0.x(), p1.x(), p0.y(), p1.y(), p0.z(), material)));
-        hittable_list_->add(std::make_shared<FlipNormals>
-                (FlipNormals(std::make_shared<Rectangle_XY>(Rectangle_XY(p0.x(), p1.x(), p0.y(), p1.y(), p0.z(), material)))));
-        hittable_list_->add(std::make_shared<Rectangle_XZ>
-                (Rectangle_XZ(p0.x(), p1.x(), p0.z(), p1.z(), p1.y(), material)));
-        hittable_list_->add(std::make_shared<FlipNormals>
-                (FlipNormals(std::make_shared<Rectangle_XZ>(Rectangle_XZ(p0.x(), p1.x(), p0.z(), p1.z(), p0.y(), material)))));
-        hittable_list_->add(std::make_shared<Rectangle_YZ>
-                (Rectangle_YZ(p0.y(), p1.y(), p0.z(), p1.z(), p1.x(), material)));
-        hittable_list_->add(std::make_shared<FlipNormals>
-                (FlipNormals(std::make_shared<Rectangle_YZ>(Rectangle_YZ(p0.y(), p1.y(), p0.z(), p1.z(), p0.x(), material)))));
+        const value_type p0_x = p0.x();
+        const value_type p0_y = p0.y();
+        const value_type p0_z = p0.z();
+        const value_type p1_x = p1.x();
+        const value_type p1_y = p1.y();
+        const value_type p1_z = p1.z();
+
+        const auto front = std::make_shared<Rectangle_XY>
+                (Rectangle_XY(p0_x, p1_x, p0_y, p1_y, p0_z, material));
+        const auto back = std::make_shared<FlipNormals>
+        (FlipNormals(std::make_shared<Rectangle_XY>(Rectangle_XY(p0_x, p1_x, p0_y, p1_y, p0_z, material))));
+        const auto top = std::make_shared<FlipNormals>
+                (FlipNormals(std::make_shared<Rectangle_XZ>(Rectangle_XZ(p0_x, p1_x, p0_z, p1_z, p0_y, material))));
+        const auto bottom = std::make_shared<Rectangle_XZ>
+                (Rectangle_XZ(p0_x, p1_x, p0_z, p1_z, p1_y, material));
+        const auto right = std::make_shared<Rectangle_YZ>
+        (Rectangle_YZ(p0_y, p1_y, p0_z, p1_z, p1_x, material));
+        const auto left = std::make_shared<FlipNormals>
+        (FlipNormals(std::make_shared<Rectangle_YZ>(Rectangle_YZ(p0_y, p1_y, p0_z, p1_z, p0_x, material))));
+
+        hittable_list_ = std::make_unique<HittableWorld>(HittableWorld(/*size=*/6));
+        hittable_list_->add(front);
+        hittable_list_->add(back);
+        hittable_list_->add(top);
+        hittable_list_->add(bottom);
+        hittable_list_->add(right);
+        hittable_list_->add(left);
 
         block_pointer_ = hittable_list_.get();
     }

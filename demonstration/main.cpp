@@ -29,8 +29,11 @@ int main() {
     // 'max_color' represents the maximum color value.
     const int max_color = 255;
 
+    // The maximum depth allowed for coloring.
+    const int maximum_depth = 50;
+
     // Scene.
-    const Scene scene = cornell_box(x_pixels, y_pixels);
+    const Scene scene = cornell_box(x_pixels, y_pixels, maximum_depth);
 
     // Print to the file.
     std::ofstream file;
@@ -44,7 +47,7 @@ int main() {
     file << x_pixels << " " << y_pixels;
     file << "\n" << max_color << "\n";
 
-    const int depth = 0;
+    const int current_depth = 0;
 
     // Top to bottom, left to right.
     for (int j = y_pixels - 1; j >= 0; --j) {
@@ -52,7 +55,7 @@ int main() {
             Color3 current_color;
 
             Camera::antialiasing(current_color, scene.camera.get(), scene.world.get(),
-                    num_runs, x_pixels, y_pixels, i, j, depth);
+                    num_runs, x_pixels, y_pixels, i, j, scene.maximum_depth, current_depth);
             Camera::dampen(current_color);
 
             const int i_red = int(max_color * current_color.r());
