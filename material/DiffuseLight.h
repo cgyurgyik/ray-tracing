@@ -6,7 +6,7 @@
 // A light emitting material.
 class DiffuseLight : public Material {
 public:
-    DiffuseLight(std::shared_ptr<Texture> emit) : emit_{emit} {}
+    DiffuseLight(std::shared_ptr<const Texture> emit) : emit_{emit} {}
 
     virtual bool scatter(const Ray& ray_in, const HitRecord& record, Color3& attenuation, Ray& scattered) const {
         return false;
@@ -16,7 +16,7 @@ public:
         return emit_->value(u, v, p);
     }
 private:
-    std::shared_ptr<Texture> emit_;
+    std::shared_ptr<const Texture> emit_;
 };
 
 #endif //RAYTRACING_DIFFUSELIGHT_H

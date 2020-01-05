@@ -8,7 +8,7 @@
 // Represents Lambertian (diffusion) case.
 class Lambertian : public Material {
 public:
-    explicit Lambertian(std::shared_ptr<Texture> albedo) : albedo_{albedo} {}
+    explicit Lambertian(std::shared_ptr<const Texture> albedo) : albedo_{albedo} {}
 
     // There are two circumstances with the Lambertian scatter case:
     // 1. Scatter always and attenuate by its reflectance R.
@@ -23,7 +23,7 @@ public:
         return true;
     }
 private:
-    std::shared_ptr<Texture> albedo_;
+    std::shared_ptr<const Texture> albedo_;
 };
 
 #endif //RAYTRACING_LAMBERTIAN_H
