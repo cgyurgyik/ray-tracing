@@ -9,6 +9,8 @@
 #include "../surfaces/Rectangle_YZ.h"
 #include "../surfaces/Triangle.h"
 #include "../surfaces/transformations/RotateY.h"
+#include "../surfaces/transformations/RotateX.h"
+#include "../surfaces/transformations/RotateZ.h"
 #include "../surfaces/transformations/Translate.h"
 #include "../surfaces/Block.h"
 #include "../surfaces/FlipNormals.h"
@@ -163,7 +165,8 @@ Scene testing_box(int x_pixels, int y_pixels, int maximum_recursion_depth) {
     const auto b = BoundVec3(450.0, 0.0, 0.0);
     const auto c = BoundVec3(300.0, 400.0, 0.0);
     const auto triangle = std::make_shared<Triangle>(Triangle(a, b, c, blue_material));
-    hittable_list->add(std::make_shared<RotateY>(RotateY(triangle, /*angle_in_degrees=*/-30.0)));
+    const auto rotate_y_triangle = std::make_shared<RotateY>(RotateY(triangle, /*angle_in_degrees=*/-30.0));
+    hittable_list->add(std::make_shared<RotateZ>(RotateZ(triangle, /*angle_in_degrees=*/50.0)));
 
     return Scene{.camera=std::move(current_camera),
                  .world=std::move(hittable_list),

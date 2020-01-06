@@ -1,15 +1,17 @@
-#ifndef RAYTRACING_ROTATEY_H
-#define RAYTRACING_ROTATEY_H
+#ifndef RAYTRACING_ROTATEZ_H
+#define RAYTRACING_ROTATEZ_H
+
 #include "../Hittable.h"
 #include <limits>
+#include <memory>
 
-// Rotation about the Y axis. Angle should be provided in degrees.
-// x' and z' can be interpreted as:
-// x' = cos(theta) * x + sin(theta) * z
-// z' = -sin(theta) * x + cos(theta) * z
-class RotateY : public Hittable {
+// Rotation counter-clockwise about the Z axis. Angle should be provided in degrees.
+// x' and y' can be interpreted as:
+// x' = cos(theta) * x - sin(theta) * y
+// y' = sin(theta) * x + cos(theta) * y
+class RotateZ : public Hittable {
 public:
-    RotateY(std::shared_ptr<const Hittable> hittable_pointer, value_type angle_in_degrees) : hittable_pointer_{hittable_pointer} {
+    RotateZ(std::shared_ptr<const Hittable> hittable_pointer, value_type angle_in_degrees) : hittable_pointer_{hittable_pointer} {
         const value_type radians = (M_PI / 180.0) * angle_in_degrees;
         sin_theta_ = sin(radians);
         cos_theta_ = cos(radians);
@@ -26,10 +28,10 @@ public:
                     const value_type x = i * bounding_box_.max().x() + (1 - i) * bounding_box_.min().x();
                     const value_type y = j * bounding_box_.max().y() + (1 - j) * bounding_box_.min().y();
                     const value_type z = k * bounding_box_.max().z() + (1 - k) * bounding_box_.min().z();
-                    const value_type new_x = cos_theta_ * x + sin_theta_ * z;
-                    const value_type new_z = -sin_theta_ * x + cos_theta_ * z;
+                    const value_type new_x = cos_theta_ * x - sin_theta_ * y;
+                    const value_type new_y = sin_theta_ * x + cos_theta_ * y;
 
-                    BoundVec3 tester(new_x, y, new_z);
+                    BoundVec3 tester(new_x, new_y, z);
                     if (tester.x() > max.x()) {
                         max.x() = tester.x();
                     }
@@ -57,11 +59,11 @@ public:
     virtual bool hit(const Ray& ray, value_type t_min, value_type t_max, HitRecord& record) const {
         BoundVec3 origin = ray.origin();
         FreeVec3 direction = ray.direction().to_free();
-        origin.x() = cos_theta_ * ray.origin().x() - sin_theta_ * ray.origin().z();
-        origin.z() = sin_theta_ * ray.origin().x() + cos_theta_ * ray.origin().z();
+        origin.x() = cos_theta_ * ray.origin().x() - sin_theta_ * ray.origin().y();
+        origin.y() = sin_theta_ * ray.origin().x() + cos_theta_ * ray.origin().y();
 
-        direction.x() = cos_theta_ * ray.direction().x() - sin_theta_ * ray.direction().z();
-        direction.z() = sin_theta_ * ray.direction().x() + cos_theta_ * ray.direction().z();
+        direction.x() = cos_theta_ * ray.direction().x() - sin_theta_ * ray.direction().y();
+        direction.y() = sin_theta_ * ray.direction().x() + cos_theta_ * ray.direction().y();
 
         const Ray rotated_ray(origin, UnitVec3(direction), ray.time());
         if (hittable_pointer_->hit(rotated_ray, t_min, t_max, record)) {
@@ -69,12 +71,12 @@ public:
             FreeVec3 normal = record.normal;
 
             point_at_parameter.x() = cos_theta_ * record.point_at_parameter.x()
-                                     + sin_theta_ * record.point_at_parameter.z();
-            point_at_parameter.z() = -sin_theta_ * record.point_at_parameter.x()
-                                     + cos_theta_*record.point_at_parameter.z();
+                                     - sin_theta_ * record.point_at_parameter.y();
+            point_at_parameter.y() = sin_theta_ * record.point_at_parameter.x()
+                                     + cos_theta_ * record.point_at_parameter.y();
 
-            normal.x() = cos_theta_ * record.normal.x() + sin_theta_ * record.normal.z();
-            normal.z() = -sin_theta_ * record.normal.x() + cos_theta_*record.normal.z();
+            normal.x() = cos_theta_ * record.normal.x() - sin_theta_ * record.normal.y();
+            normal.y() = sin_theta_ * record.normal.x() + cos_theta_*record.normal.y();
 
             record.point_at_parameter = point_at_parameter;
             record.normal = normal;
@@ -95,4 +97,5 @@ private:
     bool has_box_;
     AxisAlignedBoundingBox bounding_box_;
 };
-#endif //RAYTRACING_ROTATEY_H
+
+#endif //RAYTRACING_ROTATEZ_H
