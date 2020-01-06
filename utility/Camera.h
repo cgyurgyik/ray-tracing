@@ -58,6 +58,7 @@ public:
 
     // To implement anti-aliasing, take the average sample over n trials.
     // This allows for less jagged edges for each surface in the world.
+    // The maximum recursion depth determines how many ray bounces are allowed.
     static void antialiasing(Color3& current_color, const Camera* camera, const HittableWorld* world,
                       int num_runs, int x_pixels, int y_pixels, int i, int j,
                       int maximum_recursion_depth) {
@@ -66,7 +67,7 @@ public:
             const value_type v = value_type(j + random_value()) / value_type(y_pixels);
             const Ray ray = camera->getRay(u, v);
             int current_recursion_depth = 0;
-            current_color += color(ray, world,  maximum_recursion_depth, current_recursion_depth);
+            current_color += ray_color(ray, world,  maximum_recursion_depth, current_recursion_depth);
         }
         current_color /= value_type(num_runs); // Take average sample.
     }

@@ -8,7 +8,6 @@
 #include <random>
 #include "../material/Material.h"
 
-
 // Generates a pseudorandom number between 0.0 and 1.0.
 // See: <random> for more information.
 inline value_type random_value() {
@@ -50,10 +49,11 @@ inline UnitVec3 random_cosine_direction() {
     return UnitVec3(x, y, z);
 }
 
-// The currently coloring process during the anti-aliasing phase of raytracing.
+// The currently ray coloring process during the anti-aliasing phase of raytracing.
 // It first determines if the ray has hit. Then, if it is within current recursion boundaries, it proceeds to
 // scatter or emit light. If it is not a hit, then the color Black (0, 0, 0) is returned.
-Color3 color(const Ray& ray, const Hittable *world, int maximum_recursion_depth, int current_recursion_depth) {
+// The maximum recursion depth determines how many ray bounces are allowed.
+Color3 ray_color(const Ray& ray, const Hittable *world, int maximum_recursion_depth, int current_recursion_depth) {
     HitRecord record;
     const bool is_world_hit = world->hit(ray, /*minimum=*/value_type(0.001),
             /*maximum=*/std::numeric_limits<value_type>::max(), record);
@@ -63,7 +63,7 @@ Color3 color(const Ray& ray, const Hittable *world, int maximum_recursion_depth,
         const Color3 emitted_light = record.material->emitted(record.u, record.v, record.point_at_parameter);
         const bool meets_depth_check = current_recursion_depth < maximum_recursion_depth;
         if (meets_depth_check && record.material->scatter(ray, record, attenuation, scattered)) {
-            return emitted_light + (attenuation * color(scattered, world, maximum_recursion_depth, ++current_recursion_depth));
+            return emitted_light + (attenuation * ray_color(scattered, world, maximum_recursion_depth, ++current_recursion_depth));
         }
         return emitted_light;
     }

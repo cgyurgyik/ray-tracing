@@ -30,10 +30,10 @@ int main() {
     const int max_color = 255;
 
     // The maximum depth allowed for coloring.
-    const int maximum_depth = 50;
+    const int maximum_depth = 30;
 
     // Scene.
-    const Scene scene = cornell_box(x_pixels, y_pixels, maximum_depth);
+    const Scene scene = testing_box(x_pixels, y_pixels, maximum_depth);
 
     // Print to the file.
     std::ofstream file;
@@ -46,8 +46,6 @@ int main() {
     file << "P3\n" ;
     file << x_pixels << " " << y_pixels;
     file << "\n" << max_color << "\n";
-
-    const int current_depth = 0;
 
     // Top to bottom, left to right.
     for (int j = y_pixels - 1; j >= 0; --j) {
