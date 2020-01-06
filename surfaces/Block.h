@@ -26,10 +26,10 @@ public:
                 (Rectangle_XY(p0_x, p1_x, p0_y, p1_y, p0_z, material));
         const auto back = std::make_shared<FlipNormals>
         (FlipNormals(std::make_shared<Rectangle_XY>(Rectangle_XY(p0_x, p1_x, p0_y, p1_y, p0_z, material))));
-        const auto top = std::make_shared<FlipNormals>
-                (FlipNormals(std::make_shared<Rectangle_XZ>(Rectangle_XZ(p0_x, p1_x, p0_z, p1_z, p0_y, material))));
-        const auto bottom = std::make_shared<Rectangle_XZ>
+        const auto top = std::make_shared<Rectangle_XZ>
                 (Rectangle_XZ(p0_x, p1_x, p0_z, p1_z, p1_y, material));
+        const auto bottom = std::make_shared<FlipNormals>
+                (FlipNormals(std::make_shared<Rectangle_XZ>(Rectangle_XZ(p0_x, p1_x, p0_z, p1_z, p0_y, material))));
         const auto right = std::make_shared<Rectangle_YZ>
         (Rectangle_YZ(p0_y, p1_y, p0_z, p1_z, p1_x, material));
         const auto left = std::make_shared<FlipNormals>

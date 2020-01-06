@@ -8,6 +8,7 @@
 #include "../surfaces/Rectangle_XZ.h"
 #include "../surfaces/Rectangle_YZ.h"
 #include "../surfaces/Triangle.h"
+#include "../surfaces/Tetrahedron.h"
 #include "../surfaces/transformations/RotateY.h"
 #include "../surfaces/transformations/RotateX.h"
 #include "../surfaces/transformations/RotateZ.h"
@@ -160,13 +161,11 @@ Scene testing_box(int x_pixels, int y_pixels, int maximum_recursion_depth) {
     const auto back_wall = std::make_shared<Rectangle_XY>(Rectangle_XY(0, 555, 0, 555, 555, white_material));
     hittable_list->add(std::make_shared<FlipNormals>(FlipNormals(back_wall)));
 
-    // Triangle.
-    const auto a = BoundVec3(150.0, 0.0, 0.0);
-    const auto b = BoundVec3(450.0, 0.0, 0.0);
-    const auto c = BoundVec3(300.0, 400.0, 0.0);
-    const auto triangle = std::make_shared<Triangle>(Triangle(a, b, c, blue_material));
-    const auto rotate_y_triangle = std::make_shared<RotateY>(RotateY(triangle, /*angle_in_degrees=*/-30.0));
-    hittable_list->add(std::make_shared<RotateZ>(RotateZ(triangle, /*angle_in_degrees=*/50.0)));
+    // Tetrahedron
+    const auto base = BoundVec3(100.0, 100.0, 100.0);
+    const int height = 100;
+    const auto tetrahedron = std::make_shared<Tetrahedron>(Tetrahedron(base, height,  blue_material));
+    hittable_list->add(tetrahedron);
 
     return Scene{.camera=std::move(current_camera),
                  .world=std::move(hittable_list),
