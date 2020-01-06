@@ -159,9 +159,9 @@ Scene testing_box(int x_pixels, int y_pixels, int maximum_recursion_depth) {
     hittable_list->add(std::make_shared<FlipNormals>(FlipNormals(back_wall)));
 
     // Triangle.
-    const auto a = BoundVec3(150.0, 10.0, 0.0);
-    const auto b = BoundVec3(450.0, 10.0, 0.0);
-    const auto c = BoundVec3(300.0, 400.0, 10.0);
+    const auto a = BoundVec3(150.0, 0.0, 0.0);
+    const auto b = BoundVec3(450.0, 0.0, 0.0);
+    const auto c = BoundVec3(300.0, 400.0, 0.0);
     const auto triangle = std::make_shared<Triangle>(Triangle(a, b, c, blue_material));
     hittable_list->add(std::make_shared<RotateY>(RotateY(triangle, /*angle_in_degrees=*/-30.0)));
 

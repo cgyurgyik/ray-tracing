@@ -7,6 +7,7 @@
 #include "AxisAlignedBoundingBox.h"
 
 // Encapsulates a single sided triangle surface.
+// a, b, c are the three vertices of the triangle.
 class Triangle : public Hittable {
 public:
     Triangle(const BoundVec3& a, const BoundVec3& b, const BoundVec3& c, std::shared_ptr<const Material> material) : a_{a}, b_{b}, c_{c},
@@ -20,7 +21,6 @@ public:
     // If these all return true, it is a hit within the triangle. This is referred
     // to as the "inside-outside" technique, and can be used for any convex polygon.
     virtual bool hit(const Ray& ray, value_type t0, value_type t1, HitRecord& record) const {
-        // Produce normal using the cross product.
         const FreeVec3 normal = (b_ - a_).cross((c_ - a_));
 
         // Ray: p = origin + t * direction.
@@ -65,7 +65,8 @@ public:
         return true;
     }
 
-    // Determined by finding minimum & maximum x-, y- and z-coordinates from the three coordinates making up the triangle.
+    // Determined by finding minimum & maximum x-, y- and z-coordinates
+    // from the three vertices of the triangle.
     virtual bool bounding_box(value_type t0, value_type t1, AxisAlignedBoundingBox& box) const {
         const value_type max_x = get_max(a_.x(), get_max(b_.x(), c_.x()));
         const value_type max_y = get_max(a_.y(), get_max(b_.y(), c_.y()));
