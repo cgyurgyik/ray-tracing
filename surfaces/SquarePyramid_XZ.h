@@ -64,7 +64,9 @@ public:
         return true;
     }
 private:
+    // The base of the pyramid.
     BoundVec3 base_;
+    // The height of the pyramid.
     const int height_;
     Hittable* square_pyramid_pointer_;
     std::unique_ptr<HittableWorld> hittable_list_;
