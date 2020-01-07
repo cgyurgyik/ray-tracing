@@ -1,5 +1,5 @@
 # About
-This repository was first crafted with the steps from [Ray Tracing In One Weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html#overview) and the follow-on series. It also includes important type aspects from the blogpost about [Type-Safe Ray Tracing](https://ajeetdsouza.github.io/blog/posts/type-safe-raytracing-in-modern-cpp/). I have updated it to follow "modern C++ standards" (a continuous effort), and also added several more features listed below. Examples are also provided below.
+This repository was first crafted with the steps from [Ray Tracing In One Weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html#overview) and the follow-on series. It also includes important type aspects from the blogpost about [Type-Safe Ray Tracing](https://ajeetdsouza.github.io/blog/posts/type-safe-raytracing-in-modern-cpp/). I have updated it to follow "modern C++ standards" (a continuous effort), and also added several more features listed below. Example scenes and images are also provided.
 
 # TODOs:
 - Unit testing.
