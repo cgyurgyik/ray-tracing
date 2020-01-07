@@ -24,7 +24,7 @@ int main() {
     const int y_pixels = 200;
 
     // The average number of runs, for antialiasing.
-    const int num_runs = 50;
+    const int num_runs = 70;
 
     // 'max_color' represents the maximum color value.
     const int max_color = 255;

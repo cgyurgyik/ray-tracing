@@ -8,7 +8,7 @@
 #include "../surfaces/Rectangle_XZ.h"
 #include "../surfaces/Rectangle_YZ.h"
 #include "../surfaces/Triangle.h"
-#include "../surfaces/Tetrahedron.h"
+#include "../surfaces/SquarePyramid_XZ.h"
 #include "../surfaces/transformations/RotateY.h"
 #include "../surfaces/transformations/RotateX.h"
 #include "../surfaces/transformations/RotateZ.h"
@@ -161,11 +161,11 @@ Scene testing_box(int x_pixels, int y_pixels, int maximum_recursion_depth) {
     const auto back_wall = std::make_shared<Rectangle_XY>(Rectangle_XY(0, 555, 0, 555, 555, white_material));
     hittable_list->add(std::make_shared<FlipNormals>(FlipNormals(back_wall)));
 
-    // Tetrahedron
-    const auto base = BoundVec3(100.0, 100.0, 100.0);
+    // SquarePyramid_XZ
+    const auto base = BoundVec3(200.0, 0.0, 200.0);
     const int height = 100;
-    const auto tetrahedron = std::make_shared<Tetrahedron>(Tetrahedron(base, height,  blue_material));
-    hittable_list->add(tetrahedron);
+    const auto tetrahedron = std::make_shared<SquarePyramid_XZ>(SquarePyramid_XZ(base, height, blue_material));
+    hittable_list->add(std::make_shared<RotateY>(RotateY(tetrahedron, -18.0)));
 
     return Scene{.camera=std::move(current_camera),
                  .world=std::move(hittable_list),
