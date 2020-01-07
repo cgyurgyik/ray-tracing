@@ -162,10 +162,10 @@ Scene testing_box(int x_pixels, int y_pixels, int maximum_recursion_depth) {
     hittable_list->add(std::make_shared<FlipNormals>(FlipNormals(back_wall)));
 
     // SquarePyramid_XZ
-    const auto base = BoundVec3(200.0, 0.0, 200.0);
-    const int height = 100;
-    const auto tetrahedron = std::make_shared<SquarePyramid_XZ>(SquarePyramid_XZ(base, height, blue_material));
-    hittable_list->add(std::make_shared<RotateY>(RotateY(tetrahedron, -18.0)));
+    const auto base = BoundVec3(150.0, 0.0, 175.0);
+    const int height = 200;
+    const auto square_pyramid = std::make_shared<SquarePyramid_XZ>(SquarePyramid_XZ(base, height, blue_material));
+    hittable_list->add(std::make_shared<RotateY>(RotateY(square_pyramid, -18.0)));
 
     return Scene{.camera=std::move(current_camera),
                  .world=std::move(hittable_list),
