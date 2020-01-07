@@ -4,7 +4,6 @@ This repository was first crafted with the steps from [Ray Tracing In One Weeken
 # TODOs:
 - Unit testing.
 - Look into magic number cases and either change or document appropriately.
-- Create Pyramid surface.
 
 # Features
 - Demonstration using PPM image file. Provides different "scenes" to play around with as well.
