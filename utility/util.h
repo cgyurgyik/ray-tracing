@@ -8,6 +8,12 @@
 #include <random>
 #include "../material/Material.h"
 
+// A way to linearly interpolate between
+// a0 and a1. Weight should be in range [0.0, 1.0].
+inline value_type lerp(value_type a0, value_type a1, value_type w) {
+    return (1.0 - w) * a0 + w * a1;
+}
+
 // Generates a pseudorandom number between 0.0 and 1.0.
 // See: <random> for more information.
 inline value_type random_value() {

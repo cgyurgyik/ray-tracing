@@ -1,6 +1,7 @@
 #ifndef RAYTRACING_VEC3_H
 #define RAYTRACING_VEC3_H
 #include <cmath>
+#include <vector>
 
 // The type used for the 3-dimensional vectors.
 // In most cases, this will be either double or float.

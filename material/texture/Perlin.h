@@ -4,18 +4,26 @@
 #include "../../utility/util.h"
 #include <vector>
 
-// TODO: Documentation.
+// Encapsulates a pseudorandom gradient noise developed by Ken Perlin.
+// This particular implemntation uses 3-dimensional grid values.
+// The process of pseudorandom generations involves typically
+// three steps:
+// 1. Defining a grid with random gradient vectors
+// 2. Computing the dot product between the distance-gradient vectors
+// 3. Interpolating between these values.
+// Also added is a final step to produce turbulence, which gives
+// the Perlin Noise a look similar to marble.
 class Perlin {
 public:
-    Perlin(int num_permutations = 256) : num_permutations_{num_permutations} {
-        random_values_.resize(num_permutations_);
+    Perlin(int num_permutations) : num_permutations_{num_permutations} {
         random_vectors_.resize(num_permutations_);
         random_vectors_ = perlin_generate();
-        for (int i = 0; i < random_values_.size(); ++i) {
-            random_values_[i] = random_value();
-        }
     }
 
+    // A hashing which produces the Perlin noise.
+    // While there are many ways to go about this
+    // function, this follows closely the method used
+    // by raytracing.github.io and Andrew Kensler.
     value_type noise(const BoundVec3& p) const {
         const value_type u = p.x() - std::floor(p.x());
         const value_type v = p.y() - std::floor(p.y());
@@ -39,7 +47,9 @@ public:
         return perlin_interpolation(c, u, v, w);
     }
 
+    // Interpolates between the grid point coordinates.
     value_type perlin_interpolation(FreeVec3 c[2][2][2], value_type u, value_type v, value_type w) const {
+        // Hermite cubic to round off the interpolation.
         const value_type uu = u * u * (3 - 2 * u);
         const value_type vv = v * v * (3 - 2 * v);
         const value_type ww = w * w * (3 - 2 * w);
@@ -59,6 +69,8 @@ public:
         return accumulator;
     }
 
+    // Produces random unit vectors in a std::vector of size
+    // num_permutations_.
     std::vector<FreeVec3> perlin_generate() {
         std::vector<FreeVec3> p(num_permutations_);
         for (int i = 0; i < p.size(); ++i) {
@@ -70,6 +82,9 @@ public:
         return p;
     }
 
+    // Permutes the current std::vector p by replacing
+    // the current index's value with a randomly selected
+    // index's value.
     void permute(std::vector<int> p) {
         for (int i = p.size() - 1; i > 0; --i) {
             const int target = int(random_value() * i+1);
@@ -79,6 +94,8 @@ public:
         }
     }
 
+    // Produces an std::vector that is first numbered
+    // from [0, num_permutations_], and then permuted.
     std::vector<int> perlin_generate_permutation() {
         std::vector<int> p(num_permutations_);
         std::iota(p.begin(), p.end(), 0);
@@ -86,6 +103,8 @@ public:
         return p;
     }
 
+    // Multiple summed frequencies, or the sum of repeated calls to noise().
+    // The number of calls is determined by 'turbulence_depth'.
     value_type turbulence(const BoundVec3& p, int turbulence_depth) const {
         value_type accumulator = 0;
         value_type weight = 1.0;
@@ -99,9 +118,9 @@ public:
         return std::fabs(accumulator);
     }
 private:
+    // The number of permutations to be generated.
     const int num_permutations_;
     std::vector<FreeVec3> random_vectors_;
-    std::vector<value_type> random_values_;
     const std::vector<int> perm_x_ = perlin_generate_permutation();
     const std::vector<int> perm_y_ = perlin_generate_permutation();
     const std::vector<int> perm_z_ = perlin_generate_permutation();

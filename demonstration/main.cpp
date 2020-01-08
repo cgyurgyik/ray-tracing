@@ -1,6 +1,5 @@
 #include <iostream>
 #include <fstream>
-#include <vector>
 #include "../utility/Vec3.h"
 #include "../surfaces/HittableWorld.h"
 #include "../utility/Camera.h"
@@ -21,7 +20,7 @@
 // using the current Scene.
 int main() {
     const int x_pixels = 800;
-    const int y_pixels = 500;
+    const int y_pixels = 800;
 
     // The average number of runs, for antialiasing.
     const int num_runs = 250;
@@ -33,7 +32,7 @@ int main() {
     const int maximum_depth = 50;
 
     // Scene.
-    const Scene scene = perlin_noise_demonstration(x_pixels, y_pixels, maximum_depth);
+    const Scene scene = cornell_box_twist(x_pixels, y_pixels, maximum_depth);
 
     // Print to the file.
     std::ofstream file;
