@@ -19,5 +19,7 @@ This repository was first crafted with the steps from [Ray Tracing In One Weeken
 ![Example 1](images/raytracing_example5.png)
 - Six spheres in a triangular formation.
 ![Example 2](images/raytracing_example1.png)
+- Perlin noise.
+![Example 3](images/raytracing_example6.png)
 - Checkered Texture.
-![Example 3](images/raytracing_example4.png)
+![Example 4](images/raytracing_example4.png)
