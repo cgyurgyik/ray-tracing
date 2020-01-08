@@ -14,6 +14,14 @@ inline value_type lerp(value_type a0, value_type a1, value_type w) {
     return (1.0 - w) * a0 + w * a1;
 }
 
+// Removes NaNs from the current color vector.
+inline Color3 remove_NaN(const Color3& c) {
+    Color3 temp = c;
+    if (!(temp.r() == temp.r())) temp.r() = 0;
+    if (!(temp.g() == temp.g())) temp.g() = 0;
+    if (!(temp.b() == temp.b())) temp.b() = 0;
+}
+
 // Generates a pseudorandom number between 0.0 and 1.0.
 // See: <random> for more information.
 inline value_type random_value() {

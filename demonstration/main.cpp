@@ -19,11 +19,11 @@
 // A demonstration that generates a PPM file named "raytracing_demo.ppm"
 // using the current Scene.
 int main() {
-    const int x_pixels = 800;
-    const int y_pixels = 800;
+    const int x_pixels = 200;
+    const int y_pixels = 200;
 
     // The average number of runs, for antialiasing.
-    const int num_runs = 250;
+    const int num_runs = 50;
 
     // 'max_color' represents the maximum color value.
     const int max_color = 255;

@@ -6,7 +6,8 @@
 // The entire material will hold a checkered pattern.
 class CheckerTexture : public Texture {
 public:
-    CheckerTexture(std::shared_ptr<const Texture> odd, std::shared_ptr<const Texture> even) : odd_{odd}, even_{even} {}
+    CheckerTexture(std::shared_ptr<const Texture> odd, std::shared_ptr<const Texture> even) :
+                   odd_{odd}, even_{even} {}
 
     // Creates a checkered 3-dimensional pattern using the alternating signs of
     // cosine and sine.

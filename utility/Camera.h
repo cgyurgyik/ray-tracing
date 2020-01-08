@@ -67,6 +67,7 @@ public:
             const value_type v = value_type(j + random_value()) / value_type(y_pixels);
             const Ray ray = camera->getRay(u, v);
             int current_recursion_depth = 0;
+            current_color = remove_NaN(current_color);
             current_color += ray_color(ray, world,  maximum_recursion_depth, current_recursion_depth);
         }
         current_color /= value_type(num_runs); // Take average sample.
