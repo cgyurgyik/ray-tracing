@@ -21,5 +21,5 @@ This repository was first crafted with the steps from [Ray Tracing In One Weeken
 ![Example 2](images/raytracing_example1.png)
 - Perlin noise.
 ![Example 3](images/raytracing_example6.png)
-- Checkered Texture.
+- Checkered texture.
 ![Example 4](images/raytracing_example4.png)
