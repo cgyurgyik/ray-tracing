@@ -23,3 +23,5 @@ This repository was first crafted with the steps from [Ray Tracing In One Weeken
 ![Example 3](images/raytracing_example6.png)
 - Checkered texture.
 ![Example 4](images/raytracing_example4.png)
+- Pyramids.
+![Example 5](images/raytracing_example7.png)
