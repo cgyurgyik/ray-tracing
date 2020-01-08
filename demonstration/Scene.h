@@ -21,6 +21,7 @@
 #include "../material/Dielectric.h"
 #include "../material/texture/ConstantTexture.h"
 #include "../material/texture/CheckerTexture.h"
+#include "../material/texture/NoiseTexture.h"
 #include "../material/DiffuseLight.h"
 
 // Represents a scene. The world contains the hittables, and the camera contains the necessary angles and times.
@@ -106,15 +107,15 @@ Scene cornell_box(int x_pixels, int y_pixels, int maximum_recursion_depth) {
                  .maximum_recursion_depth=maximum_recursion_depth};
 }
 
-// A testing box. Aspect is determined by the ('x_pixels' / 'y_pixels').
-Scene testing_box(int x_pixels, int y_pixels, int maximum_recursion_depth) {
+// Demonstrates Perlin noise on a sphere.
+Scene perlin_noise_demonstration(int x_pixels, int y_pixels, int maximum_recursion_depth) {
     // Positionable camera.
-    const BoundVec3 look_from(278.0, 278.0, -800.0);
-    const FreeVec3 look_at(278.0, 278.0, 0.0);
+    const BoundVec3 look_from(24.0, 2.0, 3.0);
+    const FreeVec3 look_at(0.0, 0.0, 0.0);
     const FreeVec3 view_up(0.0, 1.0, 0.0);
     const value_type distance_to_focus = 10.0;
     const value_type aperture = 0.0;
-    const value_type field_of_view = 40.0;
+    const value_type field_of_view = 20.0;
     const value_type time0 = 0.0;
     const value_type time1 = 1.0;
     const value_type aspect = value_type(x_pixels)/value_type(y_pixels);
@@ -122,54 +123,29 @@ Scene testing_box(int x_pixels, int y_pixels, int maximum_recursion_depth) {
                                                           aperture, distance_to_focus, time0, time1));
 
     // World.
-    const int num_hittables = 8;
+    const auto light_texture = std::make_shared<ConstantTexture>(ConstantTexture(Color3(1.0, 1.0, 1.0)));
+    const auto light = std::make_shared<DiffuseLight>(DiffuseLight(light_texture));
+    const auto pertext_material = std::make_shared<Lambertian>(Lambertian(std::make_shared<NoiseTexture>(
+            NoiseTexture(/*scale=*/4, /*turbulence_depth=*/7))));
+
+    const int num_hittables = 3;
     auto hittable_list = std::make_unique<HittableWorld>(HittableWorld(num_hittables));
 
-    const auto red_texture = std::make_shared<ConstantTexture>(ConstantTexture(Color3(0.65, 0.05, 0.05)));
-    const auto white_texture = std::make_shared<ConstantTexture>(ConstantTexture(Color3(0.73, 0.73, 0.73)));
-    const auto green_texture = std::make_shared<ConstantTexture>(ConstantTexture(Color3(0.12, 0.45, 0.15)));
-    const auto blue_texture = std::make_shared<ConstantTexture>(ConstantTexture(Color3(0.05, 0.05, 0.65)));
-    const auto light_texture = std::make_shared<ConstantTexture>(ConstantTexture(Color3(1.0, 1.0, 1.0)));
-
-    const auto red_material = std::make_shared<Lambertian>(Lambertian(red_texture));
-    const auto white_material = std::make_shared<Lambertian>(Lambertian(white_texture));
-    const auto green_material = std::make_shared<Lambertian>(Lambertian(green_texture));
-    const auto blue_material = std::make_shared<Lambertian>(Lambertian(blue_texture));
-    const auto light = std::make_shared<DiffuseLight>(DiffuseLight(light_texture));
-
-    // Left wall.
-    const auto left_wall = std::make_shared<Rectangle_YZ>(Rectangle_YZ(0, 555, 0, 555, 555, green_material));
-    hittable_list->add(std::make_shared<FlipNormals>(FlipNormals(left_wall)));
-
-    // Right wall.
-    const auto right_wall = std::make_shared<Rectangle_YZ>(Rectangle_YZ(0, 555, 0, 555, 0, red_material));
-    hittable_list->add(right_wall);
-
-    // Light source.
-    const auto light_source = std::make_shared<Rectangle_XZ>(Rectangle_XZ(113, 443, 127, 432, 554, light));
-    hittable_list->add(light_source);
-
-    // Ceiling.
-    const auto ceiling = std::make_shared<Rectangle_XZ>(Rectangle_XZ(0, 555, 0, 555, 555, white_material));
-    hittable_list->add(std::make_shared<FlipNormals>(FlipNormals(ceiling)));
+    // Sphere.
+    hittable_list->add(std::make_shared<Sphere>(Sphere(BoundVec3(0.0, 2.0, 0.0), 2.0,
+                                                       pertext_material)));
 
     // Floor.
-    const auto floor = std::make_shared<Rectangle_XZ>(Rectangle_XZ(0, 555, 0, 555, 0, white_material));
-    hittable_list->add(floor);
+    hittable_list->add(std::make_shared<Sphere>(Sphere(BoundVec3(0.0, -1000.0, 0.0), 1000.0,
+                                                       pertext_material)));
 
-    // Back wall.
-    const auto back_wall = std::make_shared<Rectangle_XY>(Rectangle_XY(0, 555, 0, 555, 555, white_material));
-    hittable_list->add(std::make_shared<FlipNormals>(FlipNormals(back_wall)));
-
-    // SquarePyramid_XZ
-    const auto base = BoundVec3(150.0, 0.0, 175.0);
-    const int height = 200;
-    const auto square_pyramid = std::make_shared<SquarePyramid_XZ>(SquarePyramid_XZ(base, height, blue_material));
-    hittable_list->add(std::make_shared<RotateY>(RotateY(square_pyramid, -18.0)));
+    // Rectangular light source.
+    const auto rectangular_light = std::make_shared<Rectangle_XY>(Rectangle_XY(3.0, 5.0, 1.0, 3.0, -2.0, light));
+    hittable_list->add(rectangular_light);
 
     return Scene{.camera=std::move(current_camera),
-                 .world=std::move(hittable_list),
-                 .maximum_recursion_depth=maximum_recursion_depth};
+            .world=std::move(hittable_list),
+            .maximum_recursion_depth=maximum_recursion_depth};
 }
 
 #endif //RAYTRACING_SCENE_H

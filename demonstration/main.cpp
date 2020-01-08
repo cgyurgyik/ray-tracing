@@ -20,20 +20,20 @@
 // A demonstration that generates a PPM file named "raytracing_demo.ppm"
 // using the current Scene.
 int main() {
-    const int x_pixels = 500;
+    const int x_pixels = 800;
     const int y_pixels = 500;
 
     // The average number of runs, for antialiasing.
-    const int num_runs = 200;
+    const int num_runs = 250;
 
     // 'max_color' represents the maximum color value.
     const int max_color = 255;
 
-    // The maximum depth allowed for coloring.
-    const int maximum_depth = 30;
+    // The maximum recursion depth allowed for coloring.
+    const int maximum_depth = 50;
 
     // Scene.
-    const Scene scene = testing_box(x_pixels, y_pixels, maximum_depth);
+    const Scene scene = perlin_noise_demonstration(x_pixels, y_pixels, maximum_depth);
 
     // Print to the file.
     std::ofstream file;
