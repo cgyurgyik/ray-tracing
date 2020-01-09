@@ -226,6 +226,7 @@ public:
             default: throw std::invalid_argument("Color3 out of bounds access. For Color3[i], 0 <= i <= 2");
         }
     }
+
     inline constexpr value_type& operator[](int i) {
         switch (i) {
             case 0: return r_;

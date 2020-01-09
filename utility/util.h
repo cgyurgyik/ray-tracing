@@ -55,13 +55,12 @@ FreeVec3 random_value_in_unit_sphere() {
 
 // Returns a unit vector with random cosine direction using spherical coordinates.
 inline UnitVec3 random_cosine_direction() {
-    const value_type r1 = random_value();
     const value_type r2 = random_value();
-    const value_type z = sqrt(1.0 - r2);
-    const value_type phi = 2 * M_PI * r1;
-    const value_type x = cos(phi) * std::sqrt(r2);
-    const value_type y = sin(phi) * std::sqrt(r2);
-    return UnitVec3(x, y, z);
+    const value_type phi = 2.0 * M_PI * random_value();
+    const value_type r2_sqrt = std::sqrt(r2);
+    const value_type x = cos(phi) * r2_sqrt;
+    const value_type y = sin(phi) * r2_sqrt;
+    return UnitVec3(x, y, std::sqrt(1.0 - r2));
 }
 
 // The currently ray coloring process during the anti-aliasing phase of raytracing.
@@ -76,9 +75,11 @@ Color3 ray_color(const Ray& ray, const Hittable *world, int maximum_recursion_de
         Ray scattered;
         Color3 attenuation;
         const Color3 emitted_light = record.material->emitted(record.u, record.v, record.point_at_parameter);
-        const bool meets_depth_check = current_recursion_depth < maximum_recursion_depth;
-        if (meets_depth_check && record.material->scatter(ray, record, attenuation, scattered)) {
-            return emitted_light + (attenuation * ray_color(scattered, world, maximum_recursion_depth, ++current_recursion_depth));
+        const bool meets_recursion_depth_check = current_recursion_depth < maximum_recursion_depth;
+        if (meets_recursion_depth_check && record.material->scatter(ray, record, attenuation, scattered)) {
+            return emitted_light + (attenuation * ray_color(scattered, world,
+                                                  maximum_recursion_depth,
+                                                  ++current_recursion_depth));
         }
         return emitted_light;
     }

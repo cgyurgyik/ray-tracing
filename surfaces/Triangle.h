@@ -34,8 +34,6 @@ public:
         // Need to determine if the plane hit a point inside the triangle.
         const BoundVec3 p = ray.point_at_parameter(t);
         FreeVec3 C; // Vector perpendicular to triangle's plane.
-        value_type u;
-        value_type v;
 
         const FreeVec3 side_1 = b_ - a_;
         const FreeVec3 vp0 = p - a_;
@@ -48,13 +46,13 @@ public:
         if (normal.dot(C) < 0) return false;
 
         const value_type area_division = 2 / normal.length();
-        u = (C.length() / 2) * area_division;
+        const value_type u = (C.length() / 2) * area_division;
 
         const FreeVec3 side_3 = a_ - c_;
         const FreeVec3 vp2 = p - c_;
         C = side_3.cross(vp2);
         if (normal.dot(C) < 0) return false;
-        v = (C.length() / 2) * area_division;
+        const value_type v = (C.length() / 2) * area_division;
 
         record.u = u;
         record.v = v;
