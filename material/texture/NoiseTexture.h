@@ -14,7 +14,7 @@ public:
     // Uses the sine function to allow for basic color proportionality, and then adjusts the value accordingly
     // using the turbulence.
     virtual Color3 value(value_type u, value_type v, const BoundVec3& p) const {
-        return Color3(1.0, 1.0, 1.0) * 0.5 * (1 + sin(scale_ * p.z() + 10 *
+        return Color3(1.0, 1.0, 1.0) * 0.5 * (1 + sin(scale_ * p.z() + 10.0 *
                perlin_noise_.turbulence(p, turbulence_depth_)));
     }
 private:

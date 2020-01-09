@@ -29,6 +29,7 @@ public:
 
 private:
     std::shared_ptr<const Hittable> hittable_pointer_;
+    // The offset amount the hittable surface is translated.
     FreeVec3 offset_;
 };
 #endif //RAYTRACING_TRANSLATE_H

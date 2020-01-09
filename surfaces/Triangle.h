@@ -81,6 +81,7 @@ public:
 private:
     // The associated material of the triangular surface.
     std::shared_ptr<const Material> material_;
+    // The vertices of the triangle.
     BoundVec3 a_;
     BoundVec3 b_;
     BoundVec3 c_;

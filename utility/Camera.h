@@ -52,13 +52,15 @@ public:
     // Dampens the current color by square-rooting each value.
     static inline void dampen(Color3& current_color) {
         current_color = Color3(std::sqrt(current_color.r()),
-                      std::sqrt(current_color.g()),
-                      std::sqrt(current_color.b()));
+                               std::sqrt(current_color.g()),
+                               std::sqrt(current_color.b()));
     }
 
     // To implement anti-aliasing, take the average sample over n trials.
     // This allows for less jagged edges for each surface in the world.
     // The maximum recursion depth determines how many ray bounces are allowed.
+    // Note that NVIDIA highly recommends reducing the maximum recursion depth to
+    // improve speed. Source: https://devblogs.nvidia.com/rtx-best-practices/
     static void antialiasing(Color3& current_color, const Camera* camera, const HittableWorld* world,
                       int num_runs, int x_pixels, int y_pixels, int i, int j,
                       int maximum_recursion_depth) {
@@ -74,17 +76,26 @@ public:
     }
 
 private:
+    // The camera's field of view in degrees.
+    // It is calculated from top to bottom.
     const value_type field_of_view_;
+    // The aspect of the camera.
     const value_type aspect_;
+    // The lens radius of the camera.
     value_type lens_radius_;
+    // The origin of the field of view.
     BoundVec3 origin_;
+    // The lower left corner of the field of view.
     BoundVec3 lower_left_corner_;
+    // The horizontal direction of the field of view.
     FreeVec3 horizontal_;
+    // The vertical direction of the field of view.
     FreeVec3 vertical_;
     // u_, v_, and w_ are used to produce an orthonormal basis
     // to describe the camera's orientation.
     UnitVec3 u_, w_;
     FreeVec3 v_;
+    // The shutter time of the camera.
     value_type time0_, time1_;
 };
 #endif //RAYTRACING_CAMERA_H
