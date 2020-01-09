@@ -10,8 +10,8 @@
 // a, b, c are the three vertices of the triangle.
 class Triangle : public Hittable {
 public:
-    Triangle(const BoundVec3& a, const BoundVec3& b, const BoundVec3& c, std::shared_ptr<const Material> material) : a_{a}, b_{b}, c_{c},
-    material_{material} {}
+    Triangle(const BoundVec3& a, const BoundVec3& b, const BoundVec3& c, std::shared_ptr<const Material> material) :
+    a_{a}, b_{b}, c_{c}, material_{material} {}
 
     // A hit inside a triangle is determined by the cross product of its vertices.
     // This is translated mathematically to:
