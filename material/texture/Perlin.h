@@ -73,12 +73,12 @@ public:
     // num_permutations_.
     std::vector<FreeVec3> perlin_generate() {
         std::vector<FreeVec3> p(num_permutations_);
-        for (int i = 0; i < p.size(); ++i) {
-            const value_type x_random = 2 * random_value() - 1;
-            const value_type y_random = 2 * random_value() - 1;
-            const value_type z_random = 2 * random_value() - 1;
-            p[i] = UnitVec3(x_random, y_random, z_random).to_free();
-        }
+        auto generate_random_vector = []() {
+            return UnitVec3(2 * random_value() - 1,
+                            2 * random_value() - 1,
+                            2 * random_value() - 1).to_free();
+        };
+        std::generate(p.begin(), p.end(), generate_random_vector);
         return p;
     }
 

@@ -32,7 +32,7 @@ int main() {
     const int maximum_depth = 50;
 
     // Scene.
-    const Scene scene = cornell_box_twist(x_pixels, y_pixels, maximum_depth);
+    const Scene scene = perlin_noise_demonstration(x_pixels, y_pixels, maximum_depth);
 
     // Print to the file.
     std::ofstream file;

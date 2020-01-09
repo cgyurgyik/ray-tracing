@@ -20,6 +20,7 @@ inline Color3 remove_NaN(const Color3& c) {
     if (!(temp.r() == temp.r())) temp.r() = 0;
     if (!(temp.g() == temp.g())) temp.g() = 0;
     if (!(temp.b() == temp.b())) temp.b() = 0;
+    return temp;
 }
 
 // Generates a pseudorandom number between 0.0 and 1.0.
