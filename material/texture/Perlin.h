@@ -82,24 +82,14 @@ public:
         return p;
     }
 
-    // Permutes the current std::vector p by replacing
-    // the current index's value with a randomly selected
-    // index's value.
-    void permute(std::vector<int> p) {
-        for (int i = p.size() - 1; i > 0; --i) {
-            const int target = int(random_value() * i+1);
-            int temp = p[i];
-            p[i] = p[target];
-            p[target] = temp;
-        }
-    }
-
     // Produces an std::vector that is first numbered
     // from [0, num_permutations_], and then permuted.
     std::vector<int> perlin_generate_permutation() {
         std::vector<int> p(num_permutations_);
         std::iota(p.begin(), p.end(), 0);
-        permute(p);
+        static std::random_device rd;
+        static std::mt19937 g(rd());
+        std::shuffle(p.begin(), p.end(), g);
         return p;
     }
 

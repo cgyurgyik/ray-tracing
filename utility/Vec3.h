@@ -15,7 +15,7 @@ using value_type = double;
 //      [z]
 struct Vec3 {
 public:
-    Vec3() : x_{0.0}, y_{0.0}, z_{0.0} {}
+    constexpr Vec3() : x_{0.0}, y_{0.0}, z_{0.0} {}
     constexpr Vec3(const value_type x, const value_type y, const value_type z)
             : x_{x}, y_{y}, z_{z} {}
 
@@ -171,7 +171,7 @@ inline constexpr BoundVec3 operator-(BoundVec3 v1, const FreeVec3& v2) {
 // for mutations.
 // If no arguments are provided, defaults to (0.0, 0.0, 0.0).
 struct UnitVec3 {
-    UnitVec3() : inner_{FreeVec3(0.0,0.0,0.0)} {}
+    constexpr UnitVec3() : inner_{FreeVec3(0.0,0.0,0.0)} {}
     UnitVec3(value_type x, value_type y, value_type z)
             : UnitVec3{FreeVec3{x, y, z}} {}
 
@@ -206,7 +206,7 @@ inline constexpr FreeVec3 operator/(const UnitVec3& v, const value_type scalar) 
 // If no color provided, defaults to (0.0, 0.0, 0.0).
 struct Color3  {
 public:
-    Color3() : r_{0.0}, g_{0.0}, b_{0.0} {}
+    constexpr Color3() : r_{0.0}, g_{0.0}, b_{0.0} {}
     constexpr Color3(const value_type r, const value_type g, const value_type b)
             : r_{r}, g_{g}, b_{b} {}
 

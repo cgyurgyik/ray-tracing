@@ -17,7 +17,7 @@ struct Ray {
     }
 
     inline constexpr BoundVec3 origin() const { return this->origin_; }
-    inline UnitVec3 direction() const { return this->direction_; }
+    inline constexpr UnitVec3 direction() const { return this->direction_; }
     inline value_type time() const { return this->time_; }
 
 private:

@@ -28,10 +28,10 @@ public:
 
     bool hit(const Ray& ray, value_type t_min, value_type t_max) const {
         const FreeVec3 direction = ray.direction().to_free();
-        for (int a = 0; a < 3; ++a) {
-            const value_type invD = 1.0 / direction[a];
-            value_type t0 = (min()[a] - ray.origin()[a]) * invD;
-            value_type t1 = (max()[a] - ray.origin()[a]) * invD;
+        for (int axis = 0; axis < 3; ++axis) {
+            const value_type invD = 1.0 / direction[axis];
+            value_type t0 = (min()[axis] - ray.origin()[axis]) * invD;
+            value_type t1 = (max()[axis] - ray.origin()[axis]) * invD;
             if (invD < 0.0) std::swap(t0, t1);
             t_min = t0 > t_min ? t0 : t_min;
             t_max = t1 < t_max ? t1 : t_max;
