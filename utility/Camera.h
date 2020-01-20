@@ -62,9 +62,9 @@ public:
     // Note that NVIDIA highly recommends reducing the maximum recursion depth to
     // improve speed. Source: https://devblogs.nvidia.com/rtx-best-practices/
     static void antialiasing(Color3& current_color, const Camera* camera, const HittableWorld* world,
-                      int num_runs, int x_pixels, int y_pixels, int i, int j,
+                      int num_samples, int x_pixels, int y_pixels, int i, int j,
                       int maximum_recursion_depth) {
-        for (int current_run = 0; current_run < num_runs; ++current_run) {
+        for (int current_run = 0; current_run < num_samples; ++current_run) {
             const value_type u = value_type(i + random_value()) / value_type(x_pixels);
             const value_type v = value_type(j + random_value()) / value_type(y_pixels);
             const Ray ray = camera->getRay(u, v);
@@ -72,7 +72,7 @@ public:
             current_color = remove_NaN(current_color);
             current_color += ray_color(ray, world,  maximum_recursion_depth, current_recursion_depth);
         }
-        current_color /= value_type(num_runs); // Take average sample.
+        current_color /= value_type(num_samples); // Take average sample.
     }
 
 private:

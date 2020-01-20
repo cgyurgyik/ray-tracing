@@ -22,8 +22,8 @@ int main() {
     const int x_pixels = 200;
     const int y_pixels = 200;
 
-    // The average number of runs, for antialiasing.
-    const int num_runs = 50;
+    // The average number of samples, for antialiasing.
+    const int num_samples = 50;
 
     // 'max_color' represents the maximum color value.
     const int max_color = 255;
@@ -52,7 +52,7 @@ int main() {
             Color3 current_color;
 
             Camera::antialiasing(current_color, scene.camera.get(), scene.world.get(),
-                    num_runs, x_pixels, y_pixels, i, j, scene.maximum_recursion_depth);
+                    num_samples, x_pixels, y_pixels, i, j, scene.maximum_recursion_depth);
             Camera::dampen(current_color);
 
             const int i_red = int(max_color * current_color.r());
