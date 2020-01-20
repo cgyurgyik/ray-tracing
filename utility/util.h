@@ -67,7 +67,7 @@ inline UnitVec3 random_cosine_direction() {
 // It first determines if the ray has hit. Then, if it is within current recursion boundaries, it proceeds to
 // scatter or emit light. If it is not a hit, then the color Black (0, 0, 0) is returned.
 // The maximum recursion depth determines how many ray bounces are allowed.
-Color3 ray_color(const Ray& ray, const Hittable *world, int maximum_recursion_depth, int current_recursion_depth) {
+[[nodiscard]] Color3 ray_color(const Ray& ray, const Hittable *world, int maximum_recursion_depth, int current_recursion_depth) {
     HitRecord record;
     const bool is_world_hit = world->hit(ray, /*minimum=*/value_type(0.001),
             /*maximum=*/std::numeric_limits<value_type>::max(), record);
