@@ -3,6 +3,7 @@ This repository was first crafted with the steps from [Ray Tracing In One Weeken
 
 # TODOs:
 - Unit testing.
+- Finish documentation.
 - Look into magic number cases and either change or document appropriately.
 
 # Features
@@ -23,5 +24,3 @@ This repository was first crafted with the steps from [Ray Tracing In One Weeken
 ![Example 3](images/raytracing_example6.png)
 - Checkered texture.
 ![Example 4](images/raytracing_example4.png)
-- Pyramids.
-![Example 5](images/raytracing_example7.png)
