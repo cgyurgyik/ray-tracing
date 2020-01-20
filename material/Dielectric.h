@@ -13,7 +13,7 @@ enum DIELECTRIC_MATERIAL_REFRACTIVE_INDEX {
 };
 
 // Returns the estimated refractive index for each dielectric material.
-value_type get_refractive_index(DIELECTRIC_MATERIAL_REFRACTIVE_INDEX refractive_index) {
+[[nodiscard]] value_type get_refractive_index(DIELECTRIC_MATERIAL_REFRACTIVE_INDEX refractive_index) {
     switch (refractive_index) {
         case DIELECTRIC_MATERIAL_REFRACTIVE_INDEX::AIR : return 1.0;
         case DIELECTRIC_MATERIAL_REFRACTIVE_INDEX::GLASS_LOWER : return 1.3;
@@ -33,14 +33,15 @@ public:
 
     // Simple polynomial approximation for glass reflectivity produced
     // by Christophe Schlick.
-    value_type schlick(value_type cosine) const {
+    [[nodiscard]] value_type schlick(value_type cosine) const {
         const value_type sqrt_r0 = (1 - refractive_index_) / ( 1 + refractive_index_);
         const value_type r0 = sqrt_r0 * sqrt_r0;
         return r0 + (1 - r0) * std::pow((1-cosine), 5);
     }
 
     // Represents refraction for a dielectric material.
-    bool refract(const UnitVec3& v, const UnitVec3& normal, value_type ni_over_nt, UnitVec3& refracted) const {
+    [[nodiscard]] bool refract(const UnitVec3& v, const UnitVec3& normal,
+                               value_type ni_over_nt, UnitVec3& refracted) const {
        const value_type dt = normal.to_free().dot(v.to_free());
        const value_type discriminant = 1.0 - ni_over_nt * ni_over_nt * (1 - dt * dt);
        if (discriminant <= 0) return false;
@@ -53,7 +54,8 @@ public:
     // is not possible. This means all light is reflected internally inside the
     // solid object, also known as "total internal reflection."
     // Note also, that attenuation is always 1; a dielectric surface absorbs nothing.
-    virtual bool scatter(const Ray& ray_in, const HitRecord& record, Color3& attenuation, Ray& scattered) const {
+    virtual bool scatter(const Ray& ray_in, const HitRecord& record,
+                         Color3& attenuation, Ray& scattered) const override {
         UnitVec3 outward_normal;
         const UnitVec3 reflected = reflect(ray_in.direction(), record.normal);
         value_type ni_over_nt;

@@ -14,7 +14,7 @@ public:
     // Recall y = k_. We can calculate t = (k - a_y) / b_y.
     // -> x = a_x + t * b_x, and z = a_z + t * b_z.
     // The normal is then calculated to be (0, 1, 0) (y-axis).
-    virtual bool hit(const Ray& ray, value_type t0, value_type t1, HitRecord& record) const {
+    virtual bool hit(const Ray& ray, value_type t0, value_type t1, HitRecord& record) const override {
         const value_type t = (k_ - ray.origin().y()) / ray.direction().y();
         if (t < t0 || t > t1) return false;
         const value_type x = ray.origin().x() + ray.direction().x() * t;
@@ -32,7 +32,7 @@ public:
         return true;
     }
 
-    virtual bool bounding_box(value_type t0, value_type t1, AxisAlignedBoundingBox& box) const {
+    virtual bool bounding_box(value_type t0, value_type t1, AxisAlignedBoundingBox& box) const override {
         box = AxisAlignedBoundingBox(BoundVec3(x0_, k_ - 0.0001, z0_), BoundVec3(x1_, k_ + 0.0001, z1_));
         return true;
     }

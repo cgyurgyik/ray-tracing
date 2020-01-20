@@ -7,14 +7,15 @@
 // This means the plane is defined by its z value, i.e. z = k.
 class Rectangle_XY : public Hittable {
 public:
-    Rectangle_XY(value_type x0, value_type x1, value_type y0, value_type y1, value_type k, std::shared_ptr<const Material> material) :
+    Rectangle_XY(value_type x0, value_type x1, value_type y0, value_type y1, value_type k,
+                 std::shared_ptr<const Material> material) :
     x0_{x0}, x1_{x1}, y0_{y0}, y1_{y1}, k_{k}, material_{material} {}
 
     // It is considered a hit if x0_ x < x1_ and y0_ < y < y1_.
     // Recall z = k_. We can calculate t = (k - a_z) / b_z.
     // -> x = a_x + t * b_x, and y = a_y + t * b_y.
     // The normal is then calculated to be (0, 0, 1) (z-axis).
-    virtual bool hit(const Ray& ray, value_type t0, value_type t1, HitRecord& record) const {
+    virtual bool hit(const Ray& ray, value_type t0, value_type t1, HitRecord& record) const override {
         const value_type t = (k_ - ray.origin().z()) / ray.direction().z();
         if (t < t0 || t > t1) return false;
         const value_type x = ray.origin().x() + ray.direction().x() * t;
@@ -32,7 +33,7 @@ public:
         return true;
     }
 
-    virtual bool bounding_box(value_type t0, value_type t1, AxisAlignedBoundingBox& box) const {
+    virtual bool bounding_box(value_type t0, value_type t1, AxisAlignedBoundingBox& box) const override {
         box = AxisAlignedBoundingBox(BoundVec3(x0_, y0_, k_ - 0.0001), BoundVec3(x1_, y1_, k_ + 0.0001));
         return true;
     }

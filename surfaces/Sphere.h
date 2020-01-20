@@ -18,7 +18,7 @@ public:
     // -> = dot((A + t * B - C), A + t * B - C)) = R^2
     // -> = t^2 * dot(B, B) + 2t * dot(B, A - C) + dot (A - C, A - C) - R^2 = 0
     virtual bool hit(const Ray& ray, value_type t_min, value_type t_max,
-            HitRecord& record) const {
+                     HitRecord& record) const override {
         const BoundVec3 oc = ray.origin() - center_;
         const FreeVec3 direction = ray.direction().to_free();
         const value_type a = direction.dot(direction);
@@ -47,7 +47,7 @@ public:
         return false;
     }
 
-    virtual bool bounding_box(value_type t0, value_type t1, AxisAlignedBoundingBox& box) const {
+    virtual bool bounding_box(value_type t0, value_type t1, AxisAlignedBoundingBox& box) const override {
         const FreeVec3 radius_vector(radius_, radius_, radius_);
         box = AxisAlignedBoundingBox(BoundVec3(center_ - radius_vector), BoundVec3(center_ + radius_vector));
         return true;

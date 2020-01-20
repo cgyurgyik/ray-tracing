@@ -13,7 +13,8 @@ public:
     // There are two circumstances with the Lambertian scatter case:
     // 1. Scatter always and attenuate by its reflectance R.
     // 2. Scatter with no attenuation but absorb the fraction (1 - R) of the rays.
-    virtual bool scatter(const Ray& ray_in, const HitRecord& record, Color3& attenuation, Ray& scattered) const {
+    virtual bool scatter(const Ray& ray_in, const HitRecord& record,
+                         Color3& attenuation, Ray& scattered) const override {
         OrthonormalBasis3 uvw;
         uvw.build_from_w(UnitVec3(record.normal));
         const UnitVec3 direction = UnitVec3(uvw.local(random_cosine_direction()));

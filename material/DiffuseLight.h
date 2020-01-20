@@ -8,11 +8,12 @@ class DiffuseLight : public Material {
 public:
     DiffuseLight(std::shared_ptr<const Texture> emit) : emit_{emit} {}
 
-    virtual bool scatter(const Ray& ray_in, const HitRecord& record, Color3& attenuation, Ray& scattered) const {
+    virtual bool scatter(const Ray& ray_in, const HitRecord& record,
+                         Color3& attenuation, Ray& scattered) const override {
         return false;
     }
 
-    virtual Color3 emitted(value_type u, value_type v, const BoundVec3& p) const {
+    virtual Color3 emitted(value_type u, value_type v, const BoundVec3& p) const override {
         return emit_->value(u, v, p);
     }
 private:

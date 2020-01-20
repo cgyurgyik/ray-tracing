@@ -11,9 +11,9 @@ public:
     NoiseTexture(int turbulence_depth, int scale, Perlin perlin_noise) :
     turbulence_depth_{turbulence_depth}, scale_{scale}, perlin_noise_{perlin_noise} {}
 
-    // Uses the sine function to allow for basic color proportionality, and then adjusts the value accordingly
-    // using the turbulence.
-    virtual Color3 value(value_type u, value_type v, const BoundVec3& p) const {
+    // Uses the sine function to allow for basic color proportionality, and then adjusts the
+    // value accordingly using the turbulence.
+    virtual Color3 value(value_type u, value_type v, const BoundVec3& p) const override {
         return Color3(1.0, 1.0, 1.0) * 0.5 * (1 + sin(scale_ * p.z() + 10.0 *
                perlin_noise_.turbulence(p, turbulence_depth_)));
     }

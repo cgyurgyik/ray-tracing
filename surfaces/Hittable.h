@@ -22,11 +22,11 @@ public:
     // Given a valid interval [t_min, t_max], the ray is considered a 'hit' if it lies
     // within these intervals. This will always continue looking for the closest hit rather than the
     // first hit.
-    virtual bool hit(const Ray& ray, value_type t_min, value_type t_max, HitRecord& record) const = 0;
+    [[nodiscard]] virtual bool hit(const Ray& ray, value_type t_min, value_type t_max, HitRecord& record) const = 0;
 
     // If there exists an axis aligned bounding box within the intervals [t0, t1], produces an axis aligned bounding
     // box in 'box' and returns true. Otherwise, returns false.
-    virtual bool bounding_box(value_type t0, value_type t1, AxisAlignedBoundingBox& box) const = 0;
+    [[nodiscard]] virtual bool bounding_box(value_type t0, value_type t1, AxisAlignedBoundingBox& box) const = 0;
 };
 
 #endif //RAYTRACING_HITTABLE_H

@@ -45,11 +45,11 @@ public:
 
         block_pointer_ = hittable_list_.get();
     }
-    virtual bool hit(const Ray& ray, value_type t0, value_type t1, HitRecord& record) const {
+    virtual bool hit(const Ray& ray, value_type t0, value_type t1, HitRecord& record) const override {
         return block_pointer_->hit(ray, t0, t1, record);
     }
 
-    virtual bool bounding_box(value_type t0, value_type t1, AxisAlignedBoundingBox& box) const {
+    virtual bool bounding_box(value_type t0, value_type t1, AxisAlignedBoundingBox& box) const override {
         box = AxisAlignedBoundingBox(p_min_, p_max_);
         return true;
     }

@@ -8,7 +8,7 @@ class ConstantTexture : public Texture {
 public:
     ConstantTexture(const Color3& color) : color_{color} {}
 
-    virtual Color3 value(value_type u, value_type v, const BoundVec3& p) const {
+    virtual Color3 value(value_type u, value_type v, const BoundVec3& p) const override {
         return color_;
     }
 private:

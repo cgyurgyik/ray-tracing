@@ -23,8 +23,8 @@ public:
 
         const auto bottom = std::make_shared<FlipNormals>
                 (FlipNormals(std::make_shared<Rectangle_XZ>(
-                        Rectangle_XZ(base_x, base_x * 2,
-                                     base_z, base_z * 2,
+                        Rectangle_XZ(base_x, base_x * 2.0,
+                                     base_z, base_z * 2.0,
                                      base_y, material))));
 
         const auto front_triangle = std::make_shared<Triangle>
@@ -55,11 +55,11 @@ public:
         hittable_list_->add(r_triangle);
         square_pyramid_pointer_ = hittable_list_.get();
     }
-    virtual bool hit(const Ray& ray, value_type t0, value_type t1, HitRecord& record) const {
+    virtual bool hit(const Ray& ray, value_type t0, value_type t1, HitRecord& record) const override {
         return square_pyramid_pointer_->hit(ray, t0, t1, record);
     }
 
-    virtual bool bounding_box(value_type t0, value_type t1, AxisAlignedBoundingBox& box) const {
+    virtual bool bounding_box(value_type t0, value_type t1, AxisAlignedBoundingBox& box) const override {
         box = AxisAlignedBoundingBox(base_, base_ + FreeVec3(height_, height_, height_));
         return true;
     }
@@ -68,7 +68,9 @@ private:
     BoundVec3 base_;
     // The height of the pyramid.
     const int height_;
+    // A pointer to the square pyramid.
     Hittable* square_pyramid_pointer_;
+    // A list containing each component of the square pyramid.
     std::unique_ptr<HittableWorld> hittable_list_;
 };
 

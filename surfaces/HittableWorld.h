@@ -28,7 +28,7 @@ public:
         hittables_.clear();
     }
 
-    bool hit(const Ray &ray, value_type t_min, value_type t_max, HitRecord &record) const {
+    bool hit(const Ray &ray, value_type t_min, value_type t_max, HitRecord &record) const override {
         HitRecord temp_record;
         bool hit_anything = false;
         value_type closest_hit = t_max;
@@ -42,7 +42,7 @@ public:
         return hit_anything;
     }
 
-    bool bounding_box(value_type t0, value_type t1, AxisAlignedBoundingBox& box) const {
+    bool bounding_box(value_type t0, value_type t1, AxisAlignedBoundingBox& box) const override {
         const size_t list_size = hittables_.size();
         if (list_size <= 0) return false;
         AxisAlignedBoundingBox temp_box;

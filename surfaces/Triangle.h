@@ -20,7 +20,7 @@ public:
     // (a - c) x (p - c) dot normal > 0
     // If these all return true, it is a hit within the triangle. This is referred
     // to as the "inside-outside" technique, and can be used for any convex polygon.
-    virtual bool hit(const Ray& ray, value_type t0, value_type t1, HitRecord& record) const {
+    virtual bool hit(const Ray& ray, value_type t0, value_type t1, HitRecord& record) const override {
         const FreeVec3 normal = (b_ - a_).cross((c_ - a_));
 
         // Ray: p = origin + t * direction.
@@ -65,7 +65,7 @@ public:
 
     // Determined by finding minimum & maximum x-, y- and z-coordinates
     // from the three vertices of the triangle.
-    virtual bool bounding_box(value_type t0, value_type t1, AxisAlignedBoundingBox& box) const {
+    virtual bool bounding_box(value_type t0, value_type t1, AxisAlignedBoundingBox& box) const override {
         const value_type max_x = get_max(a_.x(), get_max(b_.x(), c_.x()));
         const value_type max_y = get_max(a_.y(), get_max(b_.y(), c_.y()));
         const value_type max_z = get_max(a_.z(), get_max(b_.z(), c_.z()));
